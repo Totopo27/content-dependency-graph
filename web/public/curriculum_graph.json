@@ -1,0 +1,173 @@
+{
+  "channel_id": "UC_test_backend_channel",
+  "channel_title": "Backend Engineering Academy",
+  "nodes": [
+    {
+      "id": "seg_01_01",
+      "type": "video_segment",
+      "label": "Introducci\u00f3n a Protocolos de Red y HTTP [0-300s]",
+      "metadata": {
+        "video_id": "vid_01",
+        "video_title": "Introducci\u00f3n a Protocolos de Red y HTTP",
+        "start_time": 0,
+        "end_time": 300,
+        "published_at": "2023-01-10T10:00:00Z",
+        "concepts_taught": [
+          "http-basics",
+          "client-server-model"
+        ],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_01_02",
+      "type": "video_segment",
+      "label": "Introducci\u00f3n a Protocolos de Red y HTTP [301-600s]",
+      "metadata": {
+        "video_id": "vid_01",
+        "video_title": "Introducci\u00f3n a Protocolos de Red y HTTP",
+        "start_time": 301,
+        "end_time": 600,
+        "published_at": "2023-01-10T10:00:00Z",
+        "concepts_taught": [
+          "http-methods"
+        ],
+        "concepts_required": [
+          "http-basics"
+        ]
+      }
+    },
+    {
+      "id": "seg_02_01",
+      "type": "video_segment",
+      "label": "Construyendo tu Primera API REST [0-450s]",
+      "metadata": {
+        "video_id": "vid_02",
+        "video_title": "Construyendo tu Primera API REST",
+        "start_time": 0,
+        "end_time": 450,
+        "published_at": "2023-02-15T10:00:00Z",
+        "concepts_taught": [
+          "rest-api-design"
+        ],
+        "concepts_required": [
+          "http-methods",
+          "client-server-model"
+        ]
+      }
+    },
+    {
+      "id": "seg_02_02",
+      "type": "video_segment",
+      "label": "Construyendo tu Primera API REST [451-900s]",
+      "metadata": {
+        "video_id": "vid_02",
+        "video_title": "Construyendo tu Primera API REST",
+        "start_time": 451,
+        "end_time": 900,
+        "published_at": "2023-02-15T10:00:00Z",
+        "concepts_taught": [
+          "json-api-endpoints"
+        ],
+        "concepts_required": [
+          "rest-api-design"
+        ]
+      }
+    },
+    {
+      "id": "seg_03_01",
+      "type": "video_segment",
+      "label": "Bases de Datos Relacionales y SQL [0-600s]",
+      "metadata": {
+        "video_id": "vid_03",
+        "video_title": "Bases de Datos Relacionales y SQL",
+        "start_time": 0,
+        "end_time": 600,
+        "published_at": "2023-03-01T10:00:00Z",
+        "concepts_taught": [
+          "relational-databases",
+          "sql-basics"
+        ],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_04_01",
+      "type": "video_segment",
+      "label": "Persistencia de Datos en APIs con PostgreSQL [0-750s]",
+      "metadata": {
+        "video_id": "vid_04",
+        "video_title": "Persistencia de Datos en APIs con PostgreSQL",
+        "start_time": 0,
+        "end_time": 750,
+        "published_at": "2023-04-10T10:00:00Z",
+        "concepts_taught": [
+          "api-database-integration"
+        ],
+        "concepts_required": [
+          "json-api-endpoints",
+          "sql-basics"
+        ]
+      }
+    },
+    {
+      "id": "seg_05_01",
+      "type": "video_segment",
+      "label": "Autenticaci\u00f3n Segura con JWT y Criptograf\u00eda Asim\u00e9trica [0-900s]",
+      "metadata": {
+        "video_id": "vid_05",
+        "video_title": "Autenticaci\u00f3n Segura con JWT y Criptograf\u00eda Asim\u00e9trica",
+        "start_time": 0,
+        "end_time": 900,
+        "published_at": "2023-05-20T10:00:00Z",
+        "concepts_taught": [
+          "jwt-authentication"
+        ],
+        "concepts_required": [
+          "api-database-integration",
+          "cryptographic-hashing"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "seg_01_01",
+      "target": "seg_01_02",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_01_02",
+      "target": "seg_02_01",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_01_01",
+      "target": "seg_02_01",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_02_01",
+      "target": "seg_02_02",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_02_02",
+      "target": "seg_04_01",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_03_01",
+      "target": "seg_04_01",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_04_01",
+      "target": "seg_05_01",
+      "relation": "PREREQUISITE_OF"
+    }
+  ],
+  "external_prerequisites": [
+    "cryptographic-hashing"
+  ]
+}

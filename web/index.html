@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Dependency Graph - Curricular Roadmap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js"></script>
+  <style>
+    #graph-container {
+      height: calc(100vh - 120px);
+      width: 100%;
+      background: radial-gradient(#1e293b 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden font-sans">
+
+  <!-- Header -->
+  <header class="h-16 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-900/60 backdrop-blur z-10">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/30">
+        CDG
+      </div>
+      <div>
+        <h1 class="text-sm font-semibold text-slate-100 flex items-center gap-2">
+          Content Dependency Graph
+          <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-normal">DAG Active</span>
+        </h1>
+        <p id="channel-title" class="text-xs text-slate-400">Cargando canal...</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center space-x-4">
+      <div class="text-xs text-slate-400">
+        Prerrequisitos Externos: <span id="external-count" class="text-amber-400 font-semibold">0</span>
+      </div>
+      <button onclick="resetView()" class="text-xs px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+        Restablecer Vista
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <div class="flex flex-1 relative overflow-hidden">
+    
+    <!-- Graph Viewport -->
+    <div class="flex-1 relative">
+      <div id="graph-container"></div>
+      
+      <!-- Legend Overlay -->
+      <div class="absolute bottom-4 left-4 bg-slate-900/90 border border-slate-800 p-3 rounded-lg text-xs backdrop-blur shadow-xl space-y-1.5 pointer-events-none">
+        <div class="font-medium text-slate-300 mb-1">Leyenda del Grafo</div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+          <span class="text-slate-400">Fundacional (Sin prerrequisitos)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+          <span class="text-slate-400">Intermedio / Dependiente</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+          <span class="text-slate-400">Segmento Objetivo Seleccionado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prerequisite Learning Path Sidebar -->
+    <aside class="w-96 border-l border-slate-800 bg-slate-900/95 flex flex-col z-10 shadow-2xl">
+      <div class="p-4 border-b border-slate-800">
+        <h2 class="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Ruta de Aprendizaje Óptima</h2>
+        <p class="text-xs text-slate-500">Hacé clic en cualquier nodo para inferir sus prerrequisitos y timestamps.</p>
+      </div>
+
+      <!-- Path Checklist Container -->
+      <div id="path-list" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <div class="text-center py-12 text-slate-500 text-xs">
+          Seleccioná un nodo del grafo para calcular su secuencia topológica previa.
+        </div>
+      </div>
+
+      <!-- External Prerequisites Banner -->
+      <div id="external-box" class="p-4 border-t border-slate-800 bg-amber-500/5 hidden">
+        <h3 class="text-xs font-semibold text-amber-400 mb-1 flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Prerrequisitos Externos Requeridos
+        </h3>
+        <p class="text-xs text-slate-400 mb-2">Este canal asume estos conceptos pero no los enseña:</p>
+        <div id="external-tags" class="flex flex-wrap gap-1.5"></div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    let network = null;
+    let graphData = null;
+    let allNodes = [];
+    let allEdges = [];
+
+    async function init() {
+      try {
+        const response = await fetch('./curriculum_graph.json');
+        graphData = await response.json();
+        
+        document.getElementById('channel-title').innerText = `${graphData.channel_title} (${graphData.channel_id})`;
+        document.getElementById('external-count').innerText = graphData.external_prerequisites.length;
+
+        // Render external prerequisites
+        if (graphData.external_prerequisites.length > 0) {
+          const extBox = document.getElementById('external-box');
+          const extTags = document.getElementById('external-tags');
+          extBox.classList.remove('hidden');
+          extTags.innerHTML = graphData.external_prerequisites.map(p => 
+            `<span class="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-[11px]">${p}</span>`
+          ).join('');
+        }
+
+        buildVisNetwork();
+      } catch (err) {
+        console.error("Error cargando grafo:", err);
+        document.getElementById('channel-title').innerText = "Error cargando curriculum_graph.json";
+      }
+    }
+
+    function buildVisNetwork() {
+      const container = document.getElementById('graph-container');
+      
+      allNodes = graphData.nodes.map(n => {
+        const isFoundational = n.metadata.concepts_required.length === 0;
+        return {
+          id: n.id,
+          label: `${n.metadata.video_title}\n[${n.metadata.start_time}s - ${n.metadata.end_time}s]`,
+          title: `Enseña: ${n.metadata.concepts_taught.join(', ')}\nRequiere: ${n.metadata.concepts_required.join(', ')}`,
+          color: {
+            background: isFoundational ? '#10b981' : '#6366f1',
+            border: isFoundational ? '#059669' : '#4f46e5',
+            highlight: { background: '#a855f7', border: '#9333ea' }
+          },
+          font: { color: '#f8fafc', size: 12, face: 'Inter, sans-serif' },
+          shape: 'box',
+          margin: 10,
+          borderWidth: 2,
+          data: n.metadata
+        };
+      });
+
+      allEdges = graphData.edges.map(e => ({
+        from: e.source,
+        to: e.target,
+        arrows: 'to',
+        color: { color: '#475569', highlight: '#c084fc' },
+        width: 1.5,
+        smooth: { type: 'cubicBezier', roundness: 0.2 }
+      }));
+
+      const data = { nodes: new vis.DataSet(allNodes), edges: new vis.DataSet(allEdges) };
+      
+      const options = {
+        layout: {
+          hierarchical: {
+            direction: 'LR',
+            sortMethod: 'directed',
+            levelSeparation: 260,
+            nodeSpacing: 100
+          }
+        },
+        physics: false,
+        interaction: { hover: true, tooltipDelay: 100 }
+      };
+
+      network = new vis.Network(container, data, options);
+
+      network.on("click", function(params) {
+        if (params.nodes.length > 0) {
+          const selectedId = params.nodes[0];
+          computeAndDisplayPath(selectedId);
+        }
+      });
+    }
+
+    function computeAndDisplayPath(targetId) {
+      // Find all upstream ancestors using BFS backward
+      const ancestors = new Set();
+      const queue = [targetId];
+
+      while (queue.length > 0) {
+        const current = queue.shift();
+        const incomingEdges = allEdges.filter(e => e.to === current);
+        for (let edge of incomingEdges) {
+          if (!ancestors.has(edge.from)) {
+            ancestors.add(edge.from);
+            queue.push(edge.from);
+          }
+        }
+      }
+
+      // Induced nodes
+      const pathNodeIds = Array.from(ancestors);
+      pathNodeIds.push(targetId);
+
+      // Simple topological ordering based on edge dependencies
+      const order = [];
+      const visited = new Set();
+      
+      function visit(nodeId) {
+        if (visited.has(nodeId)) return;
+        visited.add(nodeId);
+        const prereqs = allEdges.filter(e => e.to === nodeId && pathNodeIds.includes(e.from)).map(e => e.from);
+        for (let p of prereqs) visit(p);
+        order.push(nodeId);
+      }
+
+      for (let id of pathNodeIds) visit(id);
+
+      renderPathUI(order, targetId);
+    }
+
+    function renderPathUI(orderedIds, targetId) {
+      const container = document.getElementById('path-list');
+      container.innerHTML = '';
+
+      orderedIds.forEach((id, index) => {
+        const node = allNodes.find(n => n.id === id);
+        const meta = node.data;
+        const isTarget = (id === targetId);
+
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-lg border transition ${
+          isTarget 
+            ? 'bg-purple-950/40 border-purple-500/50 shadow-lg shadow-purple-500/10' 
+            : 'bg-slate-800/60 border-slate-700/60 hover:border-slate-600'
+        }`;
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${
+              isTarget ? 'bg-purple-500 text-white' : 'bg-slate-700 text-slate-300'
+            }">Paso ${index + 1}</span>
+            <span class="text-[11px] font-mono text-slate-400">${meta.start_time}s - ${meta.end_time}s</span>
+          </div>
+          <h4 class="text-xs font-semibold text-slate-200 line-clamp-1 mb-1">${meta.video_title}</h4>
+          <div class="space-y-1 text-[11px]">
+            <div class="text-emerald-400 font-mono text-[10px]">
+              + Enseña: ${meta.concepts_taught.join(', ')}
+            </div>
+            ${meta.concepts_required.length > 0 ? `
+              <div class="text-slate-400 font-mono text-[10px]">
+                - Requiere: ${meta.concepts_required.join(', ')}
+              </div>
+            ` : ''}
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-700/40 flex justify-end">
+            <a href="https://youtube.com/watch?v=${meta.video_id}&t=${meta.start_time}s" target="_blank" 
+               class="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-medium">
+              Ver segmento exacto ↗
+            </a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function resetView() {
+      if (network) {
+        network.fit();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
