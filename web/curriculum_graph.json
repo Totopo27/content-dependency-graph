@@ -1,174 +1,352 @@
 {
-  "channel_id": "UC_test_backend_channel",
-  "channel_title": "Backend Engineering Academy",
-  "generated_at": "2026-10-08T17:02:09.020332+00:00",
+  "channel_id": "UC_mattpocockuk",
+  "channel_title": "Matt Pocock (Total TypeScript)",
+  "generated_at": "2026-10-08T18:21:17.525079+00:00",
   "nodes": [
     {
-      "id": "seg_01_01",
+      "id": "seg_YmxwicpROps_01",
       "type": "video_segment",
-      "label": "Introducci\u00f3n a Protocolos de Red y HTTP [0-300s]",
+      "label": "TypeScript Speedrun: Crash Course for Beginners [0-300s]",
       "metadata": {
-        "video_id": "vid_01",
-        "video_title": "Introducci\u00f3n a Protocolos de Red y HTTP",
+        "video_id": "YmxwicpROps",
+        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
         "start_time": 0,
         "end_time": 300,
-        "published_at": "2023-01-10T10:00:00Z",
+        "published_at": "2026-10-08T18:20:12.118588+00:00",
         "concepts_taught": [
-          "http-basics",
-          "client-server-model"
+          "type-inference",
+          "type-annotations",
+          "interfaces-basics"
         ],
+        "concepts_required": [
+          "javascript-fundamentals"
+        ]
+      }
+    },
+    {
+      "id": "seg_YmxwicpROps_02",
+      "type": "video_segment",
+      "label": "TypeScript Speedrun: Crash Course for Beginners [300-600s]",
+      "metadata": {
+        "video_id": "YmxwicpROps",
+        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
+        "start_time": 300,
+        "end_time": 600,
+        "published_at": "2026-10-08T18:20:12.118588+00:00",
+        "concepts_taught": [
+          "tsc-compiler",
+          "ide-autocomplete",
+          "ambient-types"
+        ],
+        "concepts_required": [
+          "type-inference",
+          "interfaces-basics"
+        ]
+      }
+    },
+    {
+      "id": "seg_YmxwicpROps_03",
+      "type": "video_segment",
+      "label": "TypeScript Speedrun: Crash Course for Beginners [600-902s]",
+      "metadata": {
+        "video_id": "YmxwicpROps",
+        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
+        "start_time": 600,
+        "end_time": 902,
+        "published_at": "2026-10-08T18:20:12.118588+00:00",
+        "concepts_taught": [
+          "primitive-types",
+          "strict-mode",
+          "array-types"
+        ],
+        "concepts_required": [
+          "type-annotations"
+        ]
+      }
+    },
+    {
+      "id": "seg_YmxwicpROps_04",
+      "type": "video_segment",
+      "label": "TypeScript Speedrun: Crash Course for Beginners [902-1203s]",
+      "metadata": {
+        "video_id": "YmxwicpROps",
+        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
+        "start_time": 902,
+        "end_time": 1203,
+        "published_at": "2026-10-08T18:20:12.118588+00:00",
+        "concepts_taught": [
+          "object-types",
+          "optional-properties",
+          "union-types"
+        ],
+        "concepts_required": [
+          "primitive-types",
+          "interfaces-basics"
+        ]
+      }
+    },
+    {
+      "id": "seg_YmxwicpROps_05",
+      "type": "video_segment",
+      "label": "TypeScript Speedrun: Crash Course for Beginners [1203-1419s]",
+      "metadata": {
+        "video_id": "YmxwicpROps",
+        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
+        "start_time": 1203,
+        "end_time": 1419,
+        "published_at": "2026-10-08T18:20:12.118588+00:00",
+        "concepts_taught": [
+          "type-assertions",
+          "literal-types",
+          "any-type"
+        ],
+        "concepts_required": [
+          "union-types",
+          "object-types"
+        ]
+      }
+    },
+    {
+      "id": "seg_lraHlXpuhKs_01",
+      "type": "video_segment",
+      "label": "6 TypeScript tips to turn you into a WIZARD [0-300s]",
+      "metadata": {
+        "video_id": "lraHlXpuhKs",
+        "video_title": "6 TypeScript tips to turn you into a WIZARD",
+        "start_time": 0,
+        "end_time": 300,
+        "published_at": "2026-10-08T18:20:13.392058+00:00",
+        "concepts_taught": [
+          "utility-types-exclude-extract",
+          "utility-types-pick-omit"
+        ],
+        "concepts_required": [
+          "union-types",
+          "object-types"
+        ]
+      }
+    },
+    {
+      "id": "seg_lraHlXpuhKs_02",
+      "type": "video_segment",
+      "label": "6 TypeScript tips to turn you into a WIZARD [300-601s]",
+      "metadata": {
+        "video_id": "lraHlXpuhKs",
+        "video_title": "6 TypeScript tips to turn you into a WIZARD",
+        "start_time": 300,
+        "end_time": 601,
+        "published_at": "2026-10-08T18:20:13.392058+00:00",
+        "concepts_taught": [
+          "prettify-type-helper",
+          "loose-autocomplete-trick"
+        ],
+        "concepts_required": [
+          "union-types",
+          "intersection-types"
+        ]
+      }
+    },
+    {
+      "id": "seg_lraHlXpuhKs_03",
+      "type": "video_segment",
+      "label": "6 TypeScript tips to turn you into a WIZARD [601-901s]",
+      "metadata": {
+        "video_id": "lraHlXpuhKs",
+        "video_title": "6 TypeScript tips to turn you into a WIZARD",
+        "start_time": 601,
+        "end_time": 901,
+        "published_at": "2026-10-08T18:20:13.392058+00:00",
+        "concepts_taught": [
+          "mapped-types-basics",
+          "key-remapping",
+          "template-literal-types"
+        ],
+        "concepts_required": [
+          "union-types",
+          "object-types"
+        ]
+      }
+    },
+    {
+      "id": "seg_lraHlXpuhKs_04",
+      "type": "video_segment",
+      "label": "6 TypeScript tips to turn you into a WIZARD [901-956s]",
+      "metadata": {
+        "video_id": "lraHlXpuhKs",
+        "video_title": "6 TypeScript tips to turn you into a WIZARD",
+        "start_time": 901,
+        "end_time": 956,
+        "published_at": "2026-10-08T18:20:13.392058+00:00",
+        "concepts_taught": [
+          "discriminated-unions"
+        ],
+        "concepts_required": [
+          "mapped-types-basics",
+          "literal-types",
+          "union-types"
+        ]
+      }
+    },
+    {
+      "id": "seg_Danki1DyiuI_01",
+      "type": "video_segment",
+      "label": "TypeScript 4.9 Deep Dive: satisfies Operator [0-302s]",
+      "metadata": {
+        "video_id": "Danki1DyiuI",
+        "video_title": "TypeScript 4.9 Deep Dive: satisfies Operator",
+        "start_time": 0,
+        "end_time": 302,
+        "published_at": "2026-10-08T18:20:14.361782+00:00",
+        "concepts_taught": [
+          "file-watching-events",
+          "type-narrowing-in-operator"
+        ],
+        "concepts_required": [
+          "object-types",
+          "tsc-compiler"
+        ]
+      }
+    },
+    {
+      "id": "seg_Danki1DyiuI_02",
+      "type": "video_segment",
+      "label": "TypeScript 4.9 Deep Dive: satisfies Operator [302-604s]",
+      "metadata": {
+        "video_id": "Danki1DyiuI",
+        "video_title": "TypeScript 4.9 Deep Dive: satisfies Operator",
+        "start_time": 302,
+        "end_time": 604,
+        "published_at": "2026-10-08T18:20:14.361782+00:00",
+        "concepts_taught": [
+          "auto-accessors-classes",
+          "satisfies-operator"
+        ],
+        "concepts_required": [
+          "type-inference",
+          "object-types",
+          "union-types"
+        ]
+      }
+    },
+    {
+      "id": "seg_Danki1DyiuI_03",
+      "type": "video_segment",
+      "label": "TypeScript 4.9 Deep Dive: satisfies Operator [604-606s]",
+      "metadata": {
+        "video_id": "Danki1DyiuI",
+        "video_title": "TypeScript 4.9 Deep Dive: satisfies Operator",
+        "start_time": 604,
+        "end_time": 606,
+        "published_at": "2026-10-08T18:20:14.361782+00:00",
+        "concepts_taught": [],
         "concepts_required": []
       }
     },
     {
-      "id": "seg_01_02",
+      "id": "seg_plsnFfbqVEo_01",
       "type": "video_segment",
-      "label": "Introducci\u00f3n a Protocolos de Red y HTTP [301-600s]",
+      "label": "The SECRET POWER of indexed access types [0-80s]",
       "metadata": {
-        "video_id": "vid_01",
-        "video_title": "Introducci\u00f3n a Protocolos de Red y HTTP",
-        "start_time": 301,
-        "end_time": 600,
-        "published_at": "2023-01-10T10:00:00Z",
-        "concepts_taught": [
-          "http-methods"
-        ],
-        "concepts_required": [
-          "http-basics"
-        ]
-      }
-    },
-    {
-      "id": "seg_02_01",
-      "type": "video_segment",
-      "label": "Construyendo tu Primera API REST [0-450s]",
-      "metadata": {
-        "video_id": "vid_02",
-        "video_title": "Construyendo tu Primera API REST",
+        "video_id": "plsnFfbqVEo",
+        "video_title": "The SECRET POWER of indexed access types",
         "start_time": 0,
-        "end_time": 450,
-        "published_at": "2023-02-15T10:00:00Z",
+        "end_time": 80,
+        "published_at": "2026-10-08T18:20:15.570559+00:00",
         "concepts_taught": [
-          "rest-api-design"
+          "indexed-access-types",
+          "tuple-indexing"
         ],
         "concepts_required": [
-          "http-methods",
-          "client-server-model"
-        ]
-      }
-    },
-    {
-      "id": "seg_02_02",
-      "type": "video_segment",
-      "label": "Construyendo tu Primera API REST [451-900s]",
-      "metadata": {
-        "video_id": "vid_02",
-        "video_title": "Construyendo tu Primera API REST",
-        "start_time": 451,
-        "end_time": 900,
-        "published_at": "2023-02-15T10:00:00Z",
-        "concepts_taught": [
-          "json-api-endpoints"
-        ],
-        "concepts_required": [
-          "rest-api-design"
-        ]
-      }
-    },
-    {
-      "id": "seg_03_01",
-      "type": "video_segment",
-      "label": "Bases de Datos Relacionales y SQL [0-600s]",
-      "metadata": {
-        "video_id": "vid_03",
-        "video_title": "Bases de Datos Relacionales y SQL",
-        "start_time": 0,
-        "end_time": 600,
-        "published_at": "2023-03-01T10:00:00Z",
-        "concepts_taught": [
-          "relational-databases",
-          "sql-basics"
-        ],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_04_01",
-      "type": "video_segment",
-      "label": "Persistencia de Datos en APIs con PostgreSQL [0-750s]",
-      "metadata": {
-        "video_id": "vid_04",
-        "video_title": "Persistencia de Datos en APIs con PostgreSQL",
-        "start_time": 0,
-        "end_time": 750,
-        "published_at": "2023-04-10T10:00:00Z",
-        "concepts_taught": [
-          "api-database-integration"
-        ],
-        "concepts_required": [
-          "json-api-endpoints",
-          "sql-basics"
-        ]
-      }
-    },
-    {
-      "id": "seg_05_01",
-      "type": "video_segment",
-      "label": "Autenticaci\u00f3n Segura con JWT y Criptograf\u00eda Asim\u00e9trica [0-900s]",
-      "metadata": {
-        "video_id": "vid_05",
-        "video_title": "Autenticaci\u00f3n Segura con JWT y Criptograf\u00eda Asim\u00e9trica",
-        "start_time": 0,
-        "end_time": 900,
-        "published_at": "2023-05-20T10:00:00Z",
-        "concepts_taught": [
-          "jwt-authentication"
-        ],
-        "concepts_required": [
-          "api-database-integration",
-          "cryptographic-hashing"
+          "object-types",
+          "union-types"
         ]
       }
     }
   ],
   "edges": [
     {
-      "source": "seg_01_01",
-      "target": "seg_01_02",
+      "source": "seg_YmxwicpROps_01",
+      "target": "seg_YmxwicpROps_02",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_01_02",
-      "target": "seg_02_01",
+      "source": "seg_YmxwicpROps_01",
+      "target": "seg_YmxwicpROps_03",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_01_01",
-      "target": "seg_02_01",
+      "source": "seg_YmxwicpROps_03",
+      "target": "seg_YmxwicpROps_04",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_02_01",
-      "target": "seg_02_02",
+      "source": "seg_YmxwicpROps_01",
+      "target": "seg_YmxwicpROps_04",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_02_02",
-      "target": "seg_04_01",
+      "source": "seg_YmxwicpROps_04",
+      "target": "seg_YmxwicpROps_05",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_03_01",
-      "target": "seg_04_01",
+      "source": "seg_YmxwicpROps_04",
+      "target": "seg_lraHlXpuhKs_01",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_04_01",
-      "target": "seg_05_01",
+      "source": "seg_YmxwicpROps_04",
+      "target": "seg_lraHlXpuhKs_02",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_YmxwicpROps_04",
+      "target": "seg_lraHlXpuhKs_03",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_lraHlXpuhKs_03",
+      "target": "seg_lraHlXpuhKs_04",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_YmxwicpROps_05",
+      "target": "seg_lraHlXpuhKs_04",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_YmxwicpROps_04",
+      "target": "seg_lraHlXpuhKs_04",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_YmxwicpROps_04",
+      "target": "seg_Danki1DyiuI_01",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_YmxwicpROps_02",
+      "target": "seg_Danki1DyiuI_01",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_YmxwicpROps_01",
+      "target": "seg_Danki1DyiuI_02",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_YmxwicpROps_04",
+      "target": "seg_Danki1DyiuI_02",
+      "relation": "PREREQUISITE_OF"
+    },
+    {
+      "source": "seg_YmxwicpROps_04",
+      "target": "seg_plsnFfbqVEo_01",
       "relation": "PREREQUISITE_OF"
     }
   ],
   "external_prerequisites": [
-    "cryptographic-hashing"
+    "intersection-types",
+    "javascript-fundamentals"
   ]
 }
