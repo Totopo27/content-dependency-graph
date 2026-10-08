@@ -1,352 +1,528 @@
 {
-  "channel_id": "UC_mattpocockuk",
-  "channel_title": "Matt Pocock (Total TypeScript)",
-  "generated_at": "2026-10-08T18:21:17.525079+00:00",
+  "channel_id": "UC_mattpocockuk_ai",
+  "channel_title": "Matt Pocock: AI Coding & Agent Skills",
+  "generated_at": "2026-10-08T18:35:28.096706+00:00",
   "nodes": [
     {
-      "id": "seg_YmxwicpROps_01",
+      "id": "seg_M6mYodf0dJM_01",
       "type": "video_segment",
-      "label": "TypeScript Speedrun: Crash Course for Beginners [0-300s]",
+      "label": "mattpocock/skills: A Complete AI Coding Workflow, End-to-End [0-300s]",
       "metadata": {
-        "video_id": "YmxwicpROps",
-        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
+        "video_id": "M6mYodf0dJM",
+        "video_title": "mattpocock/skills: A Complete AI Coding Workflow, End-to-End",
         "start_time": 0,
         "end_time": 300,
-        "published_at": "2026-10-08T18:20:12.118588+00:00",
+        "published_at": "2026-10-08T18:34:48.615850+00:00",
         "concepts_taught": [
-          "type-inference",
-          "type-annotations",
-          "interfaces-basics"
+          "npx-skills-cli",
+          "skills-architecture",
+          "token-budget-skills"
         ],
         "concepts_required": [
-          "javascript-fundamentals"
+          "nodejs-runtime",
+          "cli-basics"
         ]
       }
     },
     {
-      "id": "seg_YmxwicpROps_02",
+      "id": "seg_M6mYodf0dJM_02",
       "type": "video_segment",
-      "label": "TypeScript Speedrun: Crash Course for Beginners [300-600s]",
+      "label": "mattpocock/skills: A Complete AI Coding Workflow, End-to-End [300-601s]",
       "metadata": {
-        "video_id": "YmxwicpROps",
-        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
-        "start_time": 300,
-        "end_time": 600,
-        "published_at": "2026-10-08T18:20:12.118588+00:00",
-        "concepts_taught": [
-          "tsc-compiler",
-          "ide-autocomplete",
-          "ambient-types"
-        ],
-        "concepts_required": [
-          "type-inference",
-          "interfaces-basics"
-        ]
-      }
-    },
-    {
-      "id": "seg_YmxwicpROps_03",
-      "type": "video_segment",
-      "label": "TypeScript Speedrun: Crash Course for Beginners [600-902s]",
-      "metadata": {
-        "video_id": "YmxwicpROps",
-        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
-        "start_time": 600,
-        "end_time": 902,
-        "published_at": "2026-10-08T18:20:12.118588+00:00",
-        "concepts_taught": [
-          "primitive-types",
-          "strict-mode",
-          "array-types"
-        ],
-        "concepts_required": [
-          "type-annotations"
-        ]
-      }
-    },
-    {
-      "id": "seg_YmxwicpROps_04",
-      "type": "video_segment",
-      "label": "TypeScript Speedrun: Crash Course for Beginners [902-1203s]",
-      "metadata": {
-        "video_id": "YmxwicpROps",
-        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
-        "start_time": 902,
-        "end_time": 1203,
-        "published_at": "2026-10-08T18:20:12.118588+00:00",
-        "concepts_taught": [
-          "object-types",
-          "optional-properties",
-          "union-types"
-        ],
-        "concepts_required": [
-          "primitive-types",
-          "interfaces-basics"
-        ]
-      }
-    },
-    {
-      "id": "seg_YmxwicpROps_05",
-      "type": "video_segment",
-      "label": "TypeScript Speedrun: Crash Course for Beginners [1203-1419s]",
-      "metadata": {
-        "video_id": "YmxwicpROps",
-        "video_title": "TypeScript Speedrun: Crash Course for Beginners",
-        "start_time": 1203,
-        "end_time": 1419,
-        "published_at": "2026-10-08T18:20:12.118588+00:00",
-        "concepts_taught": [
-          "type-assertions",
-          "literal-types",
-          "any-type"
-        ],
-        "concepts_required": [
-          "union-types",
-          "object-types"
-        ]
-      }
-    },
-    {
-      "id": "seg_lraHlXpuhKs_01",
-      "type": "video_segment",
-      "label": "6 TypeScript tips to turn you into a WIZARD [0-300s]",
-      "metadata": {
-        "video_id": "lraHlXpuhKs",
-        "video_title": "6 TypeScript tips to turn you into a WIZARD",
-        "start_time": 0,
-        "end_time": 300,
-        "published_at": "2026-10-08T18:20:13.392058+00:00",
-        "concepts_taught": [
-          "utility-types-exclude-extract",
-          "utility-types-pick-omit"
-        ],
-        "concepts_required": [
-          "union-types",
-          "object-types"
-        ]
-      }
-    },
-    {
-      "id": "seg_lraHlXpuhKs_02",
-      "type": "video_segment",
-      "label": "6 TypeScript tips to turn you into a WIZARD [300-601s]",
-      "metadata": {
-        "video_id": "lraHlXpuhKs",
-        "video_title": "6 TypeScript tips to turn you into a WIZARD",
+        "video_id": "M6mYodf0dJM",
+        "video_title": "mattpocock/skills: A Complete AI Coding Workflow, End-to-End",
         "start_time": 300,
         "end_time": 601,
-        "published_at": "2026-10-08T18:20:13.392058+00:00",
+        "published_at": "2026-10-08T18:34:48.615850+00:00",
         "concepts_taught": [
-          "prettify-type-helper",
-          "loose-autocomplete-trick"
+          "issue-tracker-setup",
+          "domain-documentation",
+          "context-md-adr"
         ],
         "concepts_required": [
-          "union-types",
-          "intersection-types"
+          "skills-architecture"
         ]
       }
     },
     {
-      "id": "seg_lraHlXpuhKs_03",
+      "id": "seg_M6mYodf0dJM_03",
       "type": "video_segment",
-      "label": "6 TypeScript tips to turn you into a WIZARD [601-901s]",
+      "label": "mattpocock/skills: A Complete AI Coding Workflow, End-to-End [601-901s]",
       "metadata": {
-        "video_id": "lraHlXpuhKs",
-        "video_title": "6 TypeScript tips to turn you into a WIZARD",
+        "video_id": "M6mYodf0dJM",
+        "video_title": "mattpocock/skills: A Complete AI Coding Workflow, End-to-End",
         "start_time": 601,
         "end_time": 901,
-        "published_at": "2026-10-08T18:20:13.392058+00:00",
+        "published_at": "2026-10-08T18:34:48.615850+00:00",
         "concepts_taught": [
-          "mapped-types-basics",
-          "key-remapping",
-          "template-literal-types"
+          "grill-with-docs",
+          "llm-smart-zone",
+          "to-spec-compression"
         ],
         "concepts_required": [
-          "union-types",
-          "object-types"
+          "context-md-adr",
+          "domain-documentation"
         ]
       }
     },
     {
-      "id": "seg_lraHlXpuhKs_04",
+      "id": "seg_M6mYodf0dJM_04",
       "type": "video_segment",
-      "label": "6 TypeScript tips to turn you into a WIZARD [901-956s]",
+      "label": "mattpocock/skills: A Complete AI Coding Workflow, End-to-End [901-1038s]",
       "metadata": {
-        "video_id": "lraHlXpuhKs",
-        "video_title": "6 TypeScript tips to turn you into a WIZARD",
+        "video_id": "M6mYodf0dJM",
+        "video_title": "mattpocock/skills: A Complete AI Coding Workflow, End-to-End",
         "start_time": 901,
-        "end_time": 956,
-        "published_at": "2026-10-08T18:20:13.392058+00:00",
+        "end_time": 1038,
+        "published_at": "2026-10-08T18:34:48.615850+00:00",
         "concepts_taught": [
-          "discriminated-unions"
+          "implement-skill",
+          "subagent-code-review",
+          "two-axis-review"
         ],
         "concepts_required": [
-          "mapped-types-basics",
-          "literal-types",
-          "union-types"
+          "to-spec-compression",
+          "grill-with-docs"
         ]
       }
     },
     {
-      "id": "seg_Danki1DyiuI_01",
+      "id": "seg_EJyuu6zlQCg_01",
       "type": "video_segment",
-      "label": "TypeScript 4.9 Deep Dive: satisfies Operator [0-302s]",
+      "label": "5 Claude Code Skills I Use Every Single Day [0-302s]",
       "metadata": {
-        "video_id": "Danki1DyiuI",
-        "video_title": "TypeScript 4.9 Deep Dive: satisfies Operator",
+        "video_id": "EJyuu6zlQCg",
+        "video_title": "5 Claude Code Skills I Use Every Single Day",
         "start_time": 0,
         "end_time": 302,
-        "published_at": "2026-10-08T18:20:14.361782+00:00",
+        "published_at": "2026-10-08T18:34:50.035861+00:00",
         "concepts_taught": [
-          "file-watching-events",
-          "type-narrowing-in-operator"
+          "agent-process-discipline",
+          "grill-me-skill",
+          "design-tree-concept"
         ],
         "concepts_required": [
-          "object-types",
-          "tsc-compiler"
+          "claude-code-basics"
         ]
       }
     },
     {
-      "id": "seg_Danki1DyiuI_02",
+      "id": "seg_EJyuu6zlQCg_02",
       "type": "video_segment",
-      "label": "TypeScript 4.9 Deep Dive: satisfies Operator [302-604s]",
+      "label": "5 Claude Code Skills I Use Every Single Day [302-603s]",
       "metadata": {
-        "video_id": "Danki1DyiuI",
-        "video_title": "TypeScript 4.9 Deep Dive: satisfies Operator",
+        "video_id": "EJyuu6zlQCg",
+        "video_title": "5 Claude Code Skills I Use Every Single Day",
         "start_time": 302,
-        "end_time": 604,
-        "published_at": "2026-10-08T18:20:14.361782+00:00",
+        "end_time": 603,
+        "published_at": "2026-10-08T18:34:50.035861+00:00",
         "concepts_taught": [
-          "auto-accessors-classes",
-          "satisfies-operator"
+          "write-prd-skill",
+          "prd-to-issues-skill",
+          "vertical-slices-breakdown"
         ],
         "concepts_required": [
-          "type-inference",
-          "object-types",
-          "union-types"
+          "grill-me-skill",
+          "design-tree-concept"
         ]
       }
     },
     {
-      "id": "seg_Danki1DyiuI_03",
+      "id": "seg_EJyuu6zlQCg_03",
       "type": "video_segment",
-      "label": "TypeScript 4.9 Deep Dive: satisfies Operator [604-606s]",
+      "label": "5 Claude Code Skills I Use Every Single Day [603-905s]",
       "metadata": {
-        "video_id": "Danki1DyiuI",
-        "video_title": "TypeScript 4.9 Deep Dive: satisfies Operator",
-        "start_time": 604,
-        "end_time": 606,
-        "published_at": "2026-10-08T18:20:14.361782+00:00",
+        "video_id": "EJyuu6zlQCg",
+        "video_title": "5 Claude Code Skills I Use Every Single Day",
+        "start_time": 603,
+        "end_time": 905,
+        "published_at": "2026-10-08T18:34:50.035861+00:00",
+        "concepts_taught": [
+          "subagent-code-review-patterns",
+          "fowler-smell-baseline"
+        ],
+        "concepts_required": [
+          "vertical-slices-breakdown"
+        ]
+      }
+    },
+    {
+      "id": "seg_EJyuu6zlQCg_04",
+      "type": "video_segment",
+      "label": "5 Claude Code Skills I Use Every Single Day [905-1003s]",
+      "metadata": {
+        "video_id": "EJyuu6zlQCg",
+        "video_title": "5 Claude Code Skills I Use Every Single Day",
+        "start_time": 905,
+        "end_time": 1003,
+        "published_at": "2026-10-08T18:34:50.035861+00:00",
+        "concepts_taught": [
+          "triage-labels-workflow"
+        ],
+        "concepts_required": [
+          "prd-to-issues-skill"
+        ]
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_01",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [7-307s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 7,
+        "end_time": 307,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [
+          "llm-smart-zone-vs-dumb-zone",
+          "attention-quadratic-degradation",
+          "context-window-hygiene"
+        ],
+        "concepts_required": [
+          "llm-prompting-basics"
+        ]
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_02",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [307-608s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 307,
+        "end_time": 608,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [
+          "multiphase-loops",
+          "ralph-wiggum-loop-comparison",
+          "small-task-sizing"
+        ],
+        "concepts_required": [
+          "llm-smart-zone-vs-dumb-zone"
+        ]
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_03",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [608-910s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 608,
+        "end_time": 910,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [
+          "session-phases-system-explore-impl-test",
+          "compacting-pitfalls"
+        ],
+        "concepts_required": [
+          "context-window-hygiene"
+        ]
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_04",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [910-1213s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 910,
+        "end_time": 1213,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [
+          "end-to-end-agent-lifecycle"
+        ],
+        "concepts_required": [
+          "multiphase-loops",
+          "session-phases-system-explore-impl-test"
+        ]
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_05",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [1213-1513s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 1213,
+        "end_time": 1513,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
         "concepts_taught": [],
         "concepts_required": []
       }
     },
     {
-      "id": "seg_plsnFfbqVEo_01",
+      "id": "seg_-QFHIoCo-Ko_06",
       "type": "video_segment",
-      "label": "The SECRET POWER of indexed access types [0-80s]",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [1513-1816s]",
       "metadata": {
-        "video_id": "plsnFfbqVEo",
-        "video_title": "The SECRET POWER of indexed access types",
-        "start_time": 0,
-        "end_time": 80,
-        "published_at": "2026-10-08T18:20:15.570559+00:00",
-        "concepts_taught": [
-          "indexed-access-types",
-          "tuple-indexing"
-        ],
-        "concepts_required": [
-          "object-types",
-          "union-types"
-        ]
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 1513,
+        "end_time": 1816,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_07",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [1816-2119s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 1816,
+        "end_time": 2119,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_08",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [2119-2419s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 2119,
+        "end_time": 2419,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_09",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [2419-2720s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 2419,
+        "end_time": 2720,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_10",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [2720-3021s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 2720,
+        "end_time": 3021,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_11",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [3021-3322s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 3021,
+        "end_time": 3322,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_12",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [3322-3625s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 3322,
+        "end_time": 3625,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_13",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [3625-3925s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 3625,
+        "end_time": 3925,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_14",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [3925-4226s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 3925,
+        "end_time": 4226,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_15",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [4226-4528s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 4226,
+        "end_time": 4528,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_16",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [4528-4828s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 4528,
+        "end_time": 4828,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_17",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [4828-5129s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 4828,
+        "end_time": 5129,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_18",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [5129-5429s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 5129,
+        "end_time": 5429,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_19",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [5429-5731s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 5429,
+        "end_time": 5731,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
+      }
+    },
+    {
+      "id": "seg_-QFHIoCo-Ko_20",
+      "type": "video_segment",
+      "label": "Full Walkthrough: Workflow for AI Coding — Matt Pocock [5731-5785s]",
+      "metadata": {
+        "video_id": "-QFHIoCo-Ko",
+        "video_title": "Full Walkthrough: Workflow for AI Coding — Matt Pocock",
+        "start_time": 5731,
+        "end_time": 5785,
+        "published_at": "2026-10-08T18:34:51.092996+00:00",
+        "concepts_taught": [],
+        "concepts_required": []
       }
     }
   ],
   "edges": [
     {
-      "source": "seg_YmxwicpROps_01",
-      "target": "seg_YmxwicpROps_02",
+      "source": "seg_M6mYodf0dJM_01",
+      "target": "seg_M6mYodf0dJM_02",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_YmxwicpROps_01",
-      "target": "seg_YmxwicpROps_03",
+      "source": "seg_M6mYodf0dJM_02",
+      "target": "seg_M6mYodf0dJM_03",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_YmxwicpROps_03",
-      "target": "seg_YmxwicpROps_04",
+      "source": "seg_M6mYodf0dJM_03",
+      "target": "seg_M6mYodf0dJM_04",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_YmxwicpROps_01",
-      "target": "seg_YmxwicpROps_04",
+      "source": "seg_EJyuu6zlQCg_01",
+      "target": "seg_EJyuu6zlQCg_02",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_YmxwicpROps_04",
-      "target": "seg_YmxwicpROps_05",
+      "source": "seg_EJyuu6zlQCg_02",
+      "target": "seg_EJyuu6zlQCg_03",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_YmxwicpROps_04",
-      "target": "seg_lraHlXpuhKs_01",
+      "source": "seg_EJyuu6zlQCg_02",
+      "target": "seg_EJyuu6zlQCg_04",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_YmxwicpROps_04",
-      "target": "seg_lraHlXpuhKs_02",
+      "source": "seg_-QFHIoCo-Ko_01",
+      "target": "seg_-QFHIoCo-Ko_02",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_YmxwicpROps_04",
-      "target": "seg_lraHlXpuhKs_03",
+      "source": "seg_-QFHIoCo-Ko_01",
+      "target": "seg_-QFHIoCo-Ko_03",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_lraHlXpuhKs_03",
-      "target": "seg_lraHlXpuhKs_04",
+      "source": "seg_-QFHIoCo-Ko_02",
+      "target": "seg_-QFHIoCo-Ko_04",
       "relation": "PREREQUISITE_OF"
     },
     {
-      "source": "seg_YmxwicpROps_05",
-      "target": "seg_lraHlXpuhKs_04",
-      "relation": "PREREQUISITE_OF"
-    },
-    {
-      "source": "seg_YmxwicpROps_04",
-      "target": "seg_lraHlXpuhKs_04",
-      "relation": "PREREQUISITE_OF"
-    },
-    {
-      "source": "seg_YmxwicpROps_04",
-      "target": "seg_Danki1DyiuI_01",
-      "relation": "PREREQUISITE_OF"
-    },
-    {
-      "source": "seg_YmxwicpROps_02",
-      "target": "seg_Danki1DyiuI_01",
-      "relation": "PREREQUISITE_OF"
-    },
-    {
-      "source": "seg_YmxwicpROps_01",
-      "target": "seg_Danki1DyiuI_02",
-      "relation": "PREREQUISITE_OF"
-    },
-    {
-      "source": "seg_YmxwicpROps_04",
-      "target": "seg_Danki1DyiuI_02",
-      "relation": "PREREQUISITE_OF"
-    },
-    {
-      "source": "seg_YmxwicpROps_04",
-      "target": "seg_plsnFfbqVEo_01",
+      "source": "seg_-QFHIoCo-Ko_03",
+      "target": "seg_-QFHIoCo-Ko_04",
       "relation": "PREREQUISITE_OF"
     }
   ],
   "external_prerequisites": [
-    "intersection-types",
-    "javascript-fundamentals"
+    "claude-code-basics",
+    "cli-basics",
+    "llm-prompting-basics",
+    "nodejs-runtime"
   ]
 }
