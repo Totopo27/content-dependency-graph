@@ -89,6 +89,10 @@ func (ps *PathSolver) GetLearningPath(targetSegmentID string) ([]domain.VideoSeg
 		}
 	}
 
+	if len(orderedIDs) != len(subNodes) {
+		return nil, errors.New("cyclic dependency detected: unable to topologically sort all prerequisite segments")
+	}
+
 	// Convert ordered IDs into domain.VideoSegment instances
 	var result []domain.VideoSegment
 	for _, id := range orderedIDs {

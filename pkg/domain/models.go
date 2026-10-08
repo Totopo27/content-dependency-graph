@@ -10,6 +10,7 @@ const (
 	RelationTeaches        ConceptRelationType = "TEACHES"
 	RelationRequires       ConceptRelationType = "REQUIRES"
 	RelationPrerequisiteOf ConceptRelationType = "PREREQUISITE_OF"
+	RelationSupersedes     ConceptRelationType = "SUPERSEDES"
 )
 
 type VideoSegment struct {

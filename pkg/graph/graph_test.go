@@ -94,3 +94,52 @@ func TestPathSolver_GetLearningPath(t *testing.T) {
 		t.Errorf("precedence violation: seg_03_01 should be before seg_04_01")
 	}
 }
+
+func TestPathSolver_DetectsCycle(t *testing.T) {
+	catalog := domain.ChannelCatalog{
+		ChannelID:    "UC_cycle_test",
+		ChannelTitle: "Cycle Test Channel",
+		Videos: []domain.VideoMetadata{
+			{
+				ID:          "vid_1",
+				Title:       "Video 1",
+				PublishedAt: "2026-01-01T00:00:00Z",
+				Segments: []domain.VideoSegment{
+					{
+						SegmentID:        "seg_a",
+						StartTime:        0,
+						EndTime:          60,
+						ConceptsTaught:   []string{"concept_a"},
+						ConceptsRequired: []string{},
+					},
+					{
+						SegmentID:        "seg_b",
+						StartTime:        61,
+						EndTime:          120,
+						ConceptsTaught:   []string{"concept_b"},
+						ConceptsRequired: []string{},
+					},
+				},
+			},
+		},
+	}
+
+	builder := graph.NewGraphBuilder()
+	builder.BuildFromCatalog(catalog)
+
+	// Inject a deliberate cycle between seg_a and seg_b
+	builder.AddManualEdge("seg_a", "seg_b")
+	builder.AddManualEdge("seg_b", "seg_a")
+
+	solver := graph.NewPathSolver(builder)
+	_, err := solver.GetLearningPath("seg_b")
+
+	if err == nil {
+		t.Fatalf("expected error detecting cycle, got nil")
+	}
+
+	expectedErrMsg := "cyclic dependency detected: unable to topologically sort all prerequisite segments"
+	if err.Error() != expectedErrMsg {
+		t.Errorf("expected error message '%s', got '%s'", expectedErrMsg, err.Error())
+	}
+}

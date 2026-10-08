@@ -1,0 +1,39 @@
+# Binaries and compiled output
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test caches and coverage
+.pytest_cache/
+coverage/
+*.out
+.coverage
+htmlcov/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+ENV/
+
+# Agent & Session metadata
+.atl/
+.engram/
+.scratch/
+
+# OS and Editor metadata
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

@@ -26,6 +26,11 @@ func NewGraphBuilder() *GraphBuilder {
 	}
 }
 
+func (gb *GraphBuilder) AddManualEdge(sourceID, targetID string) {
+	gb.edges[sourceID] = append(gb.edges[sourceID], targetID)
+	gb.inDeg[targetID]++
+}
+
 func (gb *GraphBuilder) BuildFromCatalog(catalog domain.ChannelCatalog) *domain.CurriculumGraph {
 	curriculum := domain.NewCurriculumGraph(catalog.ChannelID, catalog.ChannelTitle)
 
