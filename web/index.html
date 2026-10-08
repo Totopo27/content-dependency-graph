@@ -8,36 +8,59 @@
   <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js"></script>
   <style>
     #graph-container {
-      height: calc(100vh - 120px);
+      height: calc(100vh - 64px);
       width: 100%;
-      background: radial-gradient(#1e293b 1px, transparent 1px);
-      background-size: 20px 20px;
+      background: radial-gradient(#1e293b 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(51, 65, 85, 0.8);
+      border-radius: 3px;
     }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden font-sans">
 
   <!-- Header -->
-  <header class="h-16 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-900/60 backdrop-blur z-10">
+  <header class="h-16 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-900/80 backdrop-blur z-20">
     <div class="flex items-center space-x-3">
-      <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/30">
+      <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center font-black text-white shadow-lg shadow-indigo-500/25 text-sm">
         CDG
       </div>
       <div>
         <h1 class="text-sm font-semibold text-slate-100 flex items-center gap-2">
           Content Dependency Graph
-          <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-normal">DAG Active</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-medium">DAG Active</span>
+          <span id="nodes-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">0 Nodos</span>
         </h1>
-        <p id="channel-title" class="text-xs text-slate-400">Cargando canal...</p>
+        <p id="channel-title" class="text-xs text-slate-400">Cargando catálogo...</p>
       </div>
     </div>
     
-    <div class="flex items-center space-x-4">
-      <div class="text-xs text-slate-400">
-        Prerrequisitos Externos: <span id="external-count" class="text-amber-400 font-semibold">0</span>
+    <div class="flex items-center space-x-3">
+      <!-- Layout Mode Toggle -->
+      <div class="flex rounded-lg bg-slate-800/80 p-0.5 border border-slate-700 text-xs">
+        <button id="btn-layout-organic" onclick="switchLayout('organic')" class="px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium shadow-sm transition">
+          Constelación (Física)
+        </button>
+        <button id="btn-layout-hierarchical" onclick="switchLayout('hierarchical')" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition">
+          Jerarquía (LR)
+        </button>
       </div>
-      <button onclick="resetView()" class="text-xs px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
-        Restablecer Vista
+
+      <div class="text-xs text-slate-400 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-800">
+        Prerrequisitos Externos: <span id="external-count" class="text-amber-400 font-bold">0</span>
+      </div>
+
+      <button onclick="resetView()" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+        Centrar Vista
       </button>
     </div>
   </header>
@@ -49,35 +72,54 @@
     <div class="flex-1 relative">
       <div id="graph-container"></div>
       
-      <!-- Legend Overlay -->
-      <div class="absolute bottom-4 left-4 bg-slate-900/90 border border-slate-800 p-3 rounded-lg text-xs backdrop-blur shadow-xl space-y-1.5 pointer-events-none">
-        <div class="font-medium text-slate-300 mb-1">Leyenda del Grafo</div>
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-          <span class="text-slate-400">Fundacional (Sin prerrequisitos)</span>
+      <!-- Video Filter Controls Overlay (Top-Left) -->
+      <div class="absolute top-4 left-4 bg-slate-900/90 border border-slate-800 p-3 rounded-xl text-xs backdrop-blur shadow-2xl z-10 max-w-sm">
+        <div class="font-semibold text-slate-200 mb-1.5 flex items-center justify-between">
+          <span>Filtrar por Video / Fuente:</span>
+          <button onclick="filterByVideo('all')" class="text-[10px] text-indigo-400 hover:underline">Ver todos</button>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-          <span class="text-slate-400">Intermedio / Dependiente</span>
+        <select id="video-select" onchange="filterByVideo(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+          <option value="all">Todos los videos del catálogo</option>
+        </select>
+      </div>
+
+      <!-- Legend Overlay (Bottom-Left) -->
+      <div class="absolute bottom-4 left-4 bg-slate-900/90 border border-slate-800 p-3.5 rounded-xl text-xs backdrop-blur shadow-2xl space-y-2 pointer-events-none z-10">
+        <div class="font-semibold text-slate-200">Leyenda del Grafo</div>
+        <div class="flex items-center gap-2.5">
+          <span class="w-3.5 h-3.5 rounded-md bg-emerald-500 shadow-sm shadow-emerald-500/50"></span>
+          <span class="text-slate-300">Fundacional (Sin prerrequisitos internos)</span>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-purple-500"></span>
-          <span class="text-slate-400">Segmento Objetivo Seleccionado</span>
+        <div class="flex items-center gap-2.5">
+          <span class="w-3.5 h-3.5 rounded-md bg-indigo-500 shadow-sm shadow-indigo-500/50"></span>
+          <span class="text-slate-300">Intermedio / Dependiente</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <span class="w-3.5 h-3.5 rounded-md bg-purple-500 shadow-sm shadow-purple-500/50"></span>
+          <span class="text-slate-300">Segmento Seleccionado (Objetivo)</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <span class="w-6 h-0.5 bg-purple-400"></span>
+          <span class="text-slate-300">Camino Topológico Activo</span>
         </div>
       </div>
     </div>
 
     <!-- Prerequisite Learning Path Sidebar -->
-    <aside class="w-96 border-l border-slate-800 bg-slate-900/95 flex flex-col z-10 shadow-2xl">
+    <aside class="w-[420px] border-l border-slate-800 bg-slate-900/95 flex flex-col z-10 shadow-2xl">
       <div class="p-4 border-b border-slate-800">
-        <h2 class="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Ruta de Aprendizaje Óptima</h2>
-        <p class="text-xs text-slate-500">Hacé clic en cualquier nodo para inferir sus prerrequisitos y timestamps.</p>
+        <h2 class="text-xs font-bold text-slate-200 uppercase tracking-wider mb-1 flex items-center justify-between">
+          <span>Ruta de Aprendizaje Óptima</span>
+          <span id="path-step-count" class="text-indigo-400 font-mono text-[11px] normal-case">0 pasos</span>
+        </h2>
+        <p class="text-xs text-slate-400">Hacé clic en cualquier segmento del grafo para resolver su secuencia topológica previa exacta.</p>
       </div>
 
       <!-- Path Checklist Container -->
-      <div id="path-list" class="flex-1 overflow-y-auto p-4 space-y-3">
-        <div class="text-center py-12 text-slate-500 text-xs">
-          Seleccioná un nodo del grafo para calcular su secuencia topológica previa.
+      <div id="path-list" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+        <div class="text-center py-16 text-slate-500 text-xs px-6">
+          <svg class="w-10 h-10 mx-auto text-slate-600 mb-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          Seleccioná cualquier nodo en el grafo para calcular sus prerrequisitos y timestamps de reproducción recomendados.
         </div>
       </div>
 
@@ -87,8 +129,8 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
           Prerrequisitos Externos Requeridos
         </h3>
-        <p class="text-xs text-slate-400 mb-2">Este canal asume estos conceptos pero no los enseña:</p>
-        <div id="external-tags" class="flex flex-wrap gap-1.5"></div>
+        <p class="text-xs text-slate-400 mb-2">Conceptos asumidos como conocimiento previo por el creador:</p>
+        <div id="external-tags" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto custom-scrollbar"></div>
       </div>
     </aside>
 
@@ -97,12 +139,14 @@
   <script>
     let network = null;
     let graphData = null;
-    let allNodes = [];
-    let allEdges = [];
+    let nodesDataSet = null;
+    let edgesDataSet = null;
+    let currentLayout = 'organic';
+    let allNodesRaw = [];
+    let allEdgesRaw = [];
 
     async function init() {
       try {
-        // Try fetching from the Go backend API first, with fallback to local JSON file
         let response;
         try {
           response = await fetch('/api/graph');
@@ -113,7 +157,11 @@
         graphData = await response.json();
         
         document.getElementById('channel-title').innerText = `${graphData.channel_title} (${graphData.channel_id})`;
+        document.getElementById('nodes-badge').innerText = `${graphData.nodes.length} Segmentos`;
         document.getElementById('external-count').innerText = graphData.external_prerequisites.length;
+
+        // Populate video filter select
+        populateVideoFilter();
 
         // Render external prerequisites
         if (graphData.external_prerequisites.length > 0) {
@@ -132,53 +180,122 @@
       }
     }
 
+    function populateVideoFilter() {
+      const select = document.getElementById('video-select');
+      const videoMap = new Map();
+      graphData.nodes.forEach(n => {
+        const vidId = n.metadata.video_id;
+        const vidTitle = n.metadata.video_title || vidId;
+        if (!videoMap.has(vidId)) {
+          videoMap.set(vidId, vidTitle);
+        }
+      });
+
+      videoMap.forEach((title, id) => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.innerText = title;
+        select.appendChild(opt);
+      });
+    }
+
     function buildVisNetwork() {
       const container = document.getElementById('graph-container');
       
-      allNodes = graphData.nodes.map(n => {
-        const isFoundational = n.metadata.concepts_required.length === 0;
+      allNodesRaw = graphData.nodes.map(n => {
+        const isFoundational = (n.metadata.concepts_required || []).length === 0;
+        const titleShort = (n.metadata.video_title || 'Video').substring(0, 32);
+        const startSec = n.metadata.start_time || 0;
+        const endSec = n.metadata.end_time || 0;
+        
         return {
           id: n.id,
-          label: `${n.metadata.video_title}\n[${n.metadata.start_time}s - ${n.metadata.end_time}s]`,
-          title: `Enseña: ${n.metadata.concepts_taught.join(', ')}\nRequiere: ${n.metadata.concepts_required.join(', ')}`,
+          label: `${titleShort}\n[${startSec}s - ${endSec}s]`,
+          title: `<b>${n.metadata.video_title}</b><br>Segmento: ${startSec}s a ${endSec}s<br><br><b>Enseña:</b> ${(n.metadata.concepts_taught || []).join(', ') || 'Ninguno'}<br><b>Requiere:</b> ${(n.metadata.concepts_required || []).join(', ') || 'Ninguno (Fundacional)'}`,
           color: {
-            background: isFoundational ? '#10b981' : '#6366f1',
-            border: isFoundational ? '#059669' : '#4f46e5',
-            highlight: { background: '#a855f7', border: '#9333ea' }
+            background: isFoundational ? '#059669' : '#4338ca',
+            border: isFoundational ? '#10b981' : '#6366f1',
+            highlight: { background: '#9333ea', border: '#c084fc' }
           },
-          font: { color: '#f8fafc', size: 12, face: 'Inter, sans-serif' },
+          font: { color: '#ffffff', size: 13, face: 'Inter, system-ui, sans-serif', strokeWidth: 2, strokeColor: '#0f172a' },
           shape: 'box',
-          margin: 10,
+          margin: 12,
           borderWidth: 2,
+          shadow: { enabled: true, color: 'rgba(0,0,0,0.5)', size: 8, x: 2, y: 3 },
           data: n.metadata
         };
       });
 
-      allEdges = graphData.edges.map(e => ({
+      allEdgesRaw = graphData.edges.map(e => ({
+        id: `${e.source}->${e.target}`,
         from: e.source,
         to: e.target,
-        arrows: 'to',
-        color: { color: '#475569', highlight: '#c084fc' },
-        width: 1.5,
-        smooth: { type: 'cubicBezier', roundness: 0.2 }
+        arrows: { to: { enabled: true, scaleFactor: 1.1 } },
+        color: { color: '#64748b', highlight: '#c084fc' },
+        width: 2,
+        smooth: { type: 'cubicBezier', roundness: 0.3 }
       }));
 
-      const data = { nodes: new vis.DataSet(allNodes), edges: new vis.DataSet(allEdges) };
-      
-      const options = {
-        layout: {
-          hierarchical: {
-            direction: 'LR',
-            sortMethod: 'directed',
-            levelSeparation: 260,
-            nodeSpacing: 100
+      nodesDataSet = new vis.DataSet(allNodesRaw);
+      edgesDataSet = new vis.DataSet(allEdgesRaw);
+
+      renderNetworkWithOptions();
+    }
+
+    function getNetworkOptions(layoutMode) {
+      if (layoutMode === 'hierarchical') {
+        return {
+          layout: {
+            hierarchical: {
+              enabled: true,
+              direction: 'LR',
+              sortMethod: 'directed',
+              levelSeparation: 320,
+              nodeSpacing: 140,
+              treeSpacing: 160
+            }
+          },
+          physics: {
+            hierarchicalRepulsion: {
+              nodeDistance: 160
+            }
+          },
+          interaction: { hover: true, tooltipDelay: 100, zoomView: true, dragView: true }
+        };
+      }
+
+      // Organic Constellation Physics Mode (Default)
+      return {
+        layout: { hierarchical: { enabled: false } },
+        physics: {
+          enabled: true,
+          solver: 'forceAtlas2Based',
+          forceAtlas2Based: {
+            gravitationalConstant: -70,
+            centralGravity: 0.015,
+            springLength: 150,
+            springConstant: 0.08,
+            damping: 0.4,
+            avoidOverlap: 0.9
+          },
+          stabilization: {
+            iterations: 150,
+            updateInterval: 25
           }
         },
-        physics: false,
-        interaction: { hover: true, tooltipDelay: 100 }
+        interaction: { hover: true, tooltipDelay: 100, zoomView: true, dragView: true }
       };
+    }
 
-      network = new vis.Network(container, data, options);
+    function renderNetworkWithOptions() {
+      const container = document.getElementById('graph-container');
+      const options = getNetworkOptions(currentLayout);
+
+      if (network) {
+        network.destroy();
+      }
+
+      network = new vis.Network(container, { nodes: nodesDataSet, edges: edgesDataSet }, options);
 
       network.on("click", function(params) {
         if (params.nodes.length > 0) {
@@ -186,18 +303,63 @@
           computeAndDisplayPath(selectedId);
         }
       });
+
+      // Fit with comfortable zoom level after physics stabilization
+      network.once("stabilizationIterationsDone", function() {
+        network.fit({
+          animation: { duration: 800, easingFunction: 'easeInOutQuad' }
+        });
+      });
+    }
+
+    function switchLayout(mode) {
+      if (currentLayout === mode) return;
+      currentLayout = mode;
+
+      const btnOrganic = document.getElementById('btn-layout-organic');
+      const btnHierarchical = document.getElementById('btn-layout-hierarchical');
+
+      if (mode === 'organic') {
+        btnOrganic.className = "px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium shadow-sm transition";
+        btnHierarchical.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition";
+      } else {
+        btnHierarchical.className = "px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium shadow-sm transition";
+        btnOrganic.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition";
+      }
+
+      renderNetworkWithOptions();
+    }
+
+    function filterByVideo(videoId) {
+      if (videoId === 'all') {
+        nodesDataSet.clear();
+        nodesDataSet.add(allNodesRaw);
+        edgesDataSet.clear();
+        edgesDataSet.add(allEdgesRaw);
+      } else {
+        const filteredNodes = allNodesRaw.filter(n => n.data.video_id === videoId);
+        const nodeIds = new Set(filteredNodes.map(n => n.id));
+        const filteredEdges = allEdgesRaw.filter(e => nodeIds.has(e.from) && nodeIds.has(e.to));
+
+        nodesDataSet.clear();
+        nodesDataSet.add(filteredNodes);
+        edgesDataSet.clear();
+        edgesDataSet.add(filteredEdges);
+      }
+
+      network.fit({ animation: { duration: 600 } });
     }
 
     async function computeAndDisplayPath(targetId) {
+      let serverOrderedIds = null;
+
       // 1. First attempt: Ask the Go backend API for the topological path
       try {
         const response = await fetch(`/api/path?target=${encodeURIComponent(targetId)}`);
         if (response.ok) {
           const data = await response.json();
           if (data && data.steps && Array.isArray(data.steps)) {
-            const serverOrderedIds = data.steps.map(s => s.segment_id);
-            renderPathUI(serverOrderedIds, targetId);
-            return;
+            serverOrderedIds = data.steps.map(s => s.segment_id);
           }
         }
       } catch (e) {
@@ -205,79 +367,128 @@
       }
 
       // 2. Client-side fallback solver (BFS backward + Kahn/DFS)
-      const ancestors = new Set();
-      const queue = [targetId];
+      if (!serverOrderedIds) {
+        const ancestors = new Set();
+        const queue = [targetId];
 
-      while (queue.length > 0) {
-        const current = queue.shift();
-        const incomingEdges = allEdges.filter(e => e.to === current);
-        for (let edge of incomingEdges) {
-          if (!ancestors.has(edge.from)) {
-            ancestors.add(edge.from);
-            queue.push(edge.from);
+        while (queue.length > 0) {
+          const current = queue.shift();
+          const incomingEdges = allEdgesRaw.filter(e => e.to === current);
+          for (let edge of incomingEdges) {
+            if (!ancestors.has(edge.from)) {
+              ancestors.add(edge.from);
+              queue.push(edge.from);
+            }
           }
         }
+
+        const pathNodeIds = Array.from(ancestors);
+        pathNodeIds.push(targetId);
+
+        const order = [];
+        const visited = new Set();
+        
+        function visit(nodeId) {
+          if (visited.has(nodeId)) return;
+          visited.add(nodeId);
+          const prereqs = allEdgesRaw.filter(e => e.to === nodeId && pathNodeIds.includes(e.from)).map(e => e.from);
+          for (let p of prereqs) visit(p);
+          order.push(nodeId);
+        }
+
+        for (let id of pathNodeIds) visit(id);
+        serverOrderedIds = order;
       }
 
-      // Induced nodes
-      const pathNodeIds = Array.from(ancestors);
-      pathNodeIds.push(targetId);
+      // Highlight nodes & edges on network
+      highlightPathOnNetwork(serverOrderedIds, targetId);
 
-      // Simple topological ordering based on edge dependencies
-      const order = [];
-      const visited = new Set();
-      
-      function visit(nodeId) {
-        if (visited.has(nodeId)) return;
-        visited.add(nodeId);
-        const prereqs = allEdges.filter(e => e.to === nodeId && pathNodeIds.includes(e.from)).map(e => e.from);
-        for (let p of prereqs) visit(p);
-        order.push(nodeId);
-      }
+      // Render cards in sidebar
+      renderPathUI(serverOrderedIds, targetId);
+    }
 
-      for (let id of pathNodeIds) visit(id);
+    function highlightPathOnNetwork(pathIds, targetId) {
+      const pathSet = new Set(pathIds);
 
-      renderPathUI(order, targetId);
+      // Focus camera on target
+      network.focus(targetId, {
+        scale: 1.1,
+        animation: { duration: 600, easingFunction: 'easeInOutQuad' }
+      });
+
+      // Update node styles dynamically
+      const nodeUpdates = allNodesRaw.map(n => {
+        const inPath = pathSet.has(n.id);
+        const isTarget = (n.id === targetId);
+
+        if (isTarget) {
+          return { id: n.id, color: { background: '#9333ea', border: '#d8b4fe' }, borderWidth: 3 };
+        } else if (inPath) {
+          return { id: n.id, color: { background: '#6366f1', border: '#a5b4fc' }, borderWidth: 2 };
+        } else {
+          return { id: n.id, color: { background: '#1e293b', border: '#334155' }, borderWidth: 1 };
+        }
+      });
+      nodesDataSet.update(nodeUpdates);
+
+      // Update edge styles
+      const edgeUpdates = allEdgesRaw.map(e => {
+        const inPath = pathSet.has(e.from) && pathSet.has(e.to);
+        return {
+          id: e.id,
+          color: { color: inPath ? '#c084fc' : '#334155' },
+          width: inPath ? 3 : 1
+        };
+      });
+      edgesDataSet.update(edgeUpdates);
     }
 
     function renderPathUI(orderedIds, targetId) {
       const container = document.getElementById('path-list');
+      const stepCount = document.getElementById('path-step-count');
       container.innerHTML = '';
+      stepCount.innerText = `${orderedIds.length} pasos`;
 
       orderedIds.forEach((id, index) => {
-        const node = allNodes.find(n => n.id === id);
+        const node = allNodesRaw.find(n => n.id === id);
+        if (!node) return;
         const meta = node.data;
         const isTarget = (id === targetId);
 
         const card = document.createElement('div');
-        card.className = `p-3 rounded-lg border transition ${
+        card.className = `p-3.5 rounded-xl border transition cursor-pointer ${
           isTarget 
-            ? 'bg-purple-950/40 border-purple-500/50 shadow-lg shadow-purple-500/10' 
-            : 'bg-slate-800/60 border-slate-700/60 hover:border-slate-600'
+            ? 'bg-purple-950/40 border-purple-500/60 shadow-lg shadow-purple-500/10' 
+            : 'bg-slate-800/60 border-slate-700/60 hover:border-slate-500'
         }`;
 
+        card.onclick = () => {
+          network.focus(id, { scale: 1.2, animation: { duration: 500 } });
+        };
+
         card.innerHTML = `
-          <div class="flex items-start justify-between gap-2 mb-1.5">
-            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${
-              isTarget ? 'bg-purple-500 text-white' : 'bg-slate-700 text-slate-300'
-            }">Paso ${index + 1}</span>
-            <span class="text-[11px] font-mono text-slate-400">${meta.start_time}s - ${meta.end_time}s</span>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded-md font-bold ${
+              isTarget ? 'bg-purple-600 text-white shadow-sm' : 'bg-slate-700 text-slate-200'
+            }">Paso ${index + 1}${isTarget ? ' (Objetivo)' : ''}</span>
+            <span class="text-[11px] font-mono text-slate-400 font-medium">${meta.start_time}s - ${meta.end_time}s</span>
           </div>
-          <h4 class="text-xs font-semibold text-slate-200 line-clamp-1 mb-1">${meta.video_title}</h4>
+          <h4 class="text-xs font-semibold text-slate-100 line-clamp-1 mb-1.5">${meta.video_title}</h4>
           <div class="space-y-1 text-[11px]">
-            <div class="text-emerald-400 font-mono text-[10px]">
-              + Enseña: ${meta.concepts_taught.join(', ')}
+            <div class="text-emerald-400 font-mono text-[10px] bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+              <span class="font-bold">+ Enseña:</span> ${(meta.concepts_taught || []).join(', ') || 'General'}
             </div>
-            ${meta.concepts_required.length > 0 ? `
-              <div class="text-slate-400 font-mono text-[10px]">
-                - Requiere: ${meta.concepts_required.join(', ')}
+            ${(meta.concepts_required || []).length > 0 ? `
+              <div class="text-slate-300 font-mono text-[10px] bg-slate-900/60 px-2 py-1 rounded border border-slate-700/40">
+                <span class="font-bold text-slate-400">- Requiere:</span> ${meta.concepts_required.join(', ')}
               </div>
             ` : ''}
           </div>
-          <div class="mt-2 pt-2 border-t border-slate-700/40 flex justify-end">
-            <a href="https://youtube.com/watch?v=${meta.video_id}&t=${meta.start_time}s" target="_blank" 
-               class="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-medium">
-              Ver segmento exacto ↗
+          <div class="mt-2.5 pt-2 border-t border-slate-700/40 flex justify-between items-center">
+            <span class="text-[10px] text-slate-400 font-mono">${meta.video_id}</span>
+            <a href="https://youtube.com/watch?v=${meta.video_id}&t=${meta.start_time}s" target="_blank" onclick="event.stopPropagation()"
+               class="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-semibold">
+              Ver en YouTube ↗
             </a>
           </div>
         `;
@@ -287,7 +498,10 @@
 
     function resetView() {
       if (network) {
-        network.fit();
+        // Reset node styles to original
+        nodesDataSet.update(allNodesRaw);
+        edgesDataSet.update(allEdgesRaw);
+        network.fit({ animation: { duration: 600 } });
       }
     }
 
