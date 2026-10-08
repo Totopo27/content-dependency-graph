@@ -3,23 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Content Dependency Graph - Ruta de Aprendizaje</title>
+  <title>Content Dependency Graph - Curricular Index</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-canvas: #121316;
+      --bg-panel: #1a1b20;
+      --bg-panel-elevated: #22242a;
+      --border-subtle: #282a32;
+      --border-strong: #363944;
+      --text-primary: #e6e7eb;
+      --text-secondary: #9ea2ae;
+      --text-muted: #6b6f7c;
+      --accent-blue: #3b82f6;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+    }
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
     }
     .font-mono {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'IBM Plex Mono', monospace;
     }
     #graph-container {
-      height: calc(100vh - 73px);
+      height: calc(100vh - 65px);
       width: 100%;
-      background: radial-gradient(#1e293b 1.5px, transparent 1.5px);
+      background: radial-gradient(#24262f 1.5px, transparent 1.5px);
       background-size: 24px 24px;
     }
     .custom-scrollbar::-webkit-scrollbar {
@@ -29,141 +44,124 @@
       background: transparent;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(51, 65, 85, 0.6);
-      border-radius: 9999px;
+      background: #2a2d36;
+      border-radius: 3px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(71, 85, 105, 0.9);
+      background: #3b3f4c;
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden antialiased">
+<body class="flex flex-col h-screen overflow-hidden antialiased select-none">
 
-  <!-- Top Navigation Bar -->
-  <header class="h-[72px] border-b border-slate-800/80 px-8 flex items-center justify-between bg-slate-900/90 backdrop-blur-md z-30 shrink-0">
-    <!-- Left: Brand & Course Info -->
-    <div class="flex items-center space-x-4">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-extrabold text-white shadow-lg shadow-indigo-500/20 text-base tracking-tight">
+  <!-- Top Navigation Header -->
+  <header class="h-16 border-b border-[#282a32] px-6 flex items-center justify-between bg-[#16171c]/95 backdrop-blur z-30 shrink-0">
+    <!-- Brand & Metadata -->
+    <div class="flex items-center space-x-3.5">
+      <div class="w-8 h-8 rounded-md bg-[#24262f] border border-[#363944] flex items-center justify-center font-mono font-bold text-xs text-slate-200">
         CDG
       </div>
       <div>
-        <div class="flex items-center gap-2">
-          <h1 id="channel-title" class="text-sm font-bold text-slate-100">Cargando curso...</h1>
-          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Ordenado Pedagógicamente</span>
+        <div class="flex items-center gap-2.5">
+          <h1 id="channel-title" class="text-xs font-semibold text-[#e6e7eb] tracking-tight">Cargando catálogo...</h1>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1e2026] text-[#9ea2ae] border border-[#2e313b]">
+            DAG ENGINE
+          </span>
         </div>
-        <p class="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
-          <span id="stats-summary">Analizando catálogo...</span>
-        </p>
+        <p id="stats-summary" class="text-[11px] font-mono text-[#6b6f7c] mt-0.5">Analizando dependencias...</p>
       </div>
     </div>
     
-    <!-- Right: View Switcher (Roadmap vs Grafo) -->
-    <div class="flex items-center space-x-4">
+    <!-- Controls (Search + View Toggle) -->
+    <div class="flex items-center space-x-3">
       <!-- Search Input -->
-      <div class="relative w-64 hidden md:block">
-        <input type="text" id="concept-search" oninput="handleSearch(this.value)" placeholder="Buscar tema (ej: PRs, retro)..."
-               class="w-full bg-slate-800/80 border border-slate-700/80 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
-        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      <div class="relative w-64 hidden sm:block">
+        <input type="text" id="concept-search" oninput="handleSearch(this.value)" placeholder="Filtrar temas o conceptos..."
+               class="w-full bg-[#1b1c22] border border-[#282a32] rounded-md pl-8 pr-3 py-1.5 text-xs text-[#e6e7eb] placeholder-[#6b6f7c] focus:outline-none focus:border-[#4a4e5d] transition">
+        <svg class="w-3.5 h-3.5 text-[#6b6f7c] absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
 
-      <!-- Main Mode Switcher -->
-      <div class="flex rounded-xl bg-slate-800/80 p-1 border border-slate-700/80 text-xs shadow-inner">
+      <!-- Mode Switcher -->
+      <div class="flex rounded-md bg-[#1b1c22] p-0.5 border border-[#282a32] text-xs">
         <button id="btn-view-roadmap" onclick="switchMainView('roadmap')" 
-                class="px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm transition flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-          Plan de Estudio
+                class="px-3 py-1 rounded bg-[#2a2c35] text-[#e6e7eb] font-medium transition flex items-center gap-1.5 border border-[#383b47]">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          Índice Secuencial
         </button>
         <button id="btn-view-graph" onclick="switchMainView('graph')" 
-                class="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 font-medium transition flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-          Mapa Conceptual (Grafo)
+                class="px-3 py-1 rounded text-[#9ea2ae] hover:text-[#e6e7eb] transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-[#6b6f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          Grafo de Dependencias
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Content Container -->
-  <main class="flex-1 relative overflow-hidden bg-slate-950">
+  <!-- Workspace Container -->
+  <main class="flex-1 relative overflow-hidden bg-[#121316]">
 
-    <!-- VIEW 1: CLEAN ROADMAP & TIMELINE (Default Primary View) -->
-    <div id="view-roadmap-container" class="h-full overflow-y-auto custom-scrollbar px-6 py-8 max-w-5xl mx-auto space-y-8">
+    <!-- VIEW 1: SEQUENTIAL TECHNICAL INDEX (Default View) -->
+    <div id="view-roadmap-container" class="h-full overflow-y-auto custom-scrollbar px-6 py-6 max-w-4xl mx-auto space-y-6">
       
-      <!-- Welcome Hero Card -->
-      <div class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-        <div class="max-w-2xl">
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-3">
-            <span>✨ Guía de Aprendizaje Sin Relleno</span>
-          </div>
-          <h2 class="text-xl font-extrabold text-slate-100 tracking-tight">Ruta sugerida para dominar este contenido</h2>
-          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-            Organizamos todos los videos del canal en el orden lógico en que debés mirarlos. Cada lección apunta al minuto exacto donde se explica el concepto, sin que tengas que adivinar qué ver primero.
-          </p>
-          <div class="flex items-center gap-3 mt-4">
-            <button onclick="startFromBeginning()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              Comenzar desde la Lección 1
-            </button>
-            <div id="external-prereq-badge" class="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-2 rounded-xl font-medium hidden">
-              ⚠️ Este curso asume conocimientos previos
-            </div>
-          </div>
+      <!-- Catalog Header Bar -->
+      <div class="flex items-center justify-between border-b border-[#24262f] pb-4">
+        <div>
+          <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-[#9ea2ae]">Ruta Curricular Determinista</h2>
+          <p class="text-xs text-[#6b6f7c] mt-0.5">Orden de estudio inferido mediante ordenamiento topológico causal.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="startFromBeginning()" class="px-3 py-1.5 rounded bg-[#24262f] hover:bg-[#2c2f3a] text-xs font-medium text-[#e6e7eb] border border-[#363944] transition flex items-center gap-1.5">
+            <svg class="w-3 h-3 text-[#3b82f6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 3l14 9-14 9V3z"></path></svg>
+            Reproducir Lección 1
+          </button>
         </div>
       </div>
 
-      <!-- External Prerequisites Callout if any -->
-      <div id="external-warning-card" class="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-5 hidden">
-        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2 mb-1">
-          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-          Lo que el autor da por sabido antes de empezar
-        </h3>
-        <p class="text-xs text-slate-400 mb-3">El autor menciona estos conceptos en sus videos asumiendo que ya los conocés de antemano:</p>
-        <div id="external-tags-list" class="flex flex-wrap gap-2"></div>
+      <!-- External Dependencies Panel (If any) -->
+      <div id="external-warning-card" class="bg-[#18191f] border border-[#3a3222] rounded-lg p-4 space-y-2 hidden">
+        <div class="flex items-center gap-2 text-xs font-mono font-semibold text-[#f59e0b]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Prerrequisitos Externos Detectados
+        </div>
+        <p class="text-[11px] text-[#9ea2ae]">El creador asume los siguientes conceptos pero no incluye un segmento introductorio en este catálogo:</p>
+        <div id="external-tags-list" class="flex flex-wrap gap-1.5 pt-1"></div>
       </div>
 
-      <!-- Step-by-Step Curriculum Timeline -->
-      <div class="space-y-6">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-          <h3 class="text-sm font-bold text-slate-200">Secuencia Curricular Recomendada</h3>
-          <span id="lesson-count-text" class="text-xs text-slate-400 font-mono">0 lecciones ordenadas</span>
-        </div>
-
-        <!-- Timeline Cards Container -->
-        <div id="timeline-steps-container" class="space-y-4">
-          <!-- Populated by JavaScript -->
-        </div>
+      <!-- Timeline List -->
+      <div id="timeline-steps-container" class="space-y-3">
+        <!-- Dynamically generated clean technical rows -->
       </div>
 
     </div>
 
-    <!-- VIEW 2: INTERACTIVE GRAPH (Alternative Exploratory View) -->
+    <!-- VIEW 2: GRAPH VISUALIZER (Secondary View) -->
     <div id="view-graph-container" class="h-full w-full hidden relative">
       <div id="graph-container"></div>
       
-      <!-- Graph Controls Float Overlay -->
-      <div class="absolute top-4 left-4 bg-slate-900/95 border border-slate-800 p-3.5 rounded-2xl text-xs backdrop-blur shadow-2xl z-10 space-y-2 max-w-xs">
-        <div class="font-bold text-slate-200">Explorador de Dependencias</div>
-        <p class="text-[11px] text-slate-400">Hacé clic en cualquier nodo para ver qué lecciones previas necesitás para entenderlo.</p>
-        <div class="pt-1 flex gap-2">
-          <button onclick="switchLayout('organic')" id="btn-sub-organic" class="flex-1 py-1 px-2 rounded-lg bg-indigo-600 text-white text-[11px] font-semibold">
-            Constelación
+      <!-- Graph Layout Sub-controls -->
+      <div class="absolute top-4 left-4 bg-[#1a1b20]/95 border border-[#282a32] p-3 rounded-md text-xs z-10 space-y-2 max-w-xs shadow-xl">
+        <div class="font-mono text-[11px] font-semibold text-[#9ea2ae] uppercase">Distribución de Nodos</div>
+        <div class="flex gap-1.5">
+          <button onclick="switchLayout('organic')" id="btn-sub-organic" class="flex-1 py-1 px-2 rounded bg-[#2a2c35] text-[#e6e7eb] font-mono text-[11px] border border-[#383b47]">
+            Fuerza
           </button>
-          <button onclick="switchLayout('hierarchical')" id="btn-sub-hierarchical" class="flex-1 py-1 px-2 rounded-lg bg-slate-800 text-slate-400 text-[11px] font-medium">
-            Jerárquico
+          <button onclick="switchLayout('hierarchical')" id="btn-sub-hierarchical" class="flex-1 py-1 px-2 rounded text-[#6b6f7c] font-mono text-[11px] hover:text-[#9ea2ae]">
+            Jerarquía
           </button>
         </div>
       </div>
 
-      <!-- Selected Path Floating Modal on Click -->
-      <div id="graph-selected-path-card" class="absolute bottom-6 right-6 w-96 bg-slate-900/95 border border-indigo-500/40 p-4 rounded-2xl shadow-2xl backdrop-blur z-20 hidden">
-        <div class="flex items-start justify-between mb-2">
+      <!-- Graph Detail Floating Panel -->
+      <div id="graph-selected-path-card" class="absolute bottom-6 right-6 w-80 bg-[#1a1b20]/95 border border-[#363944] p-4 rounded-lg shadow-2xl z-20 hidden">
+        <div class="flex items-start justify-between border-b border-[#282a32] pb-2 mb-2">
           <div>
-            <span class="text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full">Ruta Calculada</span>
-            <h4 id="modal-path-title" class="text-xs font-bold text-slate-100 mt-1 line-clamp-1">Objetivo</h4>
+            <div class="text-[10px] font-mono text-[#3b82f6] uppercase">Segmento Objetivo</div>
+            <h4 id="modal-path-title" class="text-xs font-semibold text-[#e6e7eb] mt-0.5 line-clamp-1">Objetivo</h4>
           </div>
-          <button onclick="closeGraphModal()" class="text-slate-400 hover:text-slate-200 text-xs p-1">✕</button>
+          <button onclick="closeGraphModal()" class="text-[#6b6f7c] hover:text-[#e6e7eb] text-xs">✕</button>
         </div>
-        <p id="modal-path-desc" class="text-[11px] text-slate-400 mb-3">Pasos necesarios para este video:</p>
-        <div id="modal-path-steps" class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar pr-1"></div>
+        <div class="text-[11px] text-[#9ea2ae] mb-2 font-mono">Ancestros necesarios:</div>
+        <div id="modal-path-steps" class="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
     </div>
 
@@ -191,25 +189,20 @@
         }
         graphData = await response.json();
 
-        // Update Header Titles
-        document.getElementById('channel-title').innerText = graphData.channel_title || "Canal Educativo";
+        document.getElementById('channel-title').innerText = graphData.channel_title || "Catálogo Curricular";
         
-        // Compute and sort topological curriculum
         computeTopologicalCurriculum();
-
-        // Render UI
         renderHeaderStats();
         renderExternalPrerequisites();
         renderTimelineRoadmap();
 
       } catch (err) {
         console.error("Error al inicializar:", err);
-        document.getElementById('channel-title').innerText = "Error cargando datos del curso";
+        document.getElementById('channel-title').innerText = "Error cargando catálogo";
       }
     }
 
     function computeTopologicalCurriculum() {
-      // Build adjacency and in-degree maps
       const inDeg = new Map();
       const adj = new Map();
       const nodeMap = new Map();
@@ -225,13 +218,11 @@
         inDeg.set(e.target, (inDeg.get(e.target) || 0) + 1);
       });
 
-      // Kahn's Topological Sort with tie-breaking by published_at / startTime
       const queue = [];
       inDeg.forEach((deg, id) => {
         if (deg === 0) queue.push(id);
       });
 
-      // Sort initial queue chronologically
       queue.sort((a, b) => {
         const nA = nodeMap.get(a).metadata;
         const nB = nodeMap.get(b).metadata;
@@ -254,7 +245,6 @@
         }
       }
 
-      // If any cycle or unreached nodes remain, append remaining
       if (sorted.length < graphData.nodes.length) {
         const visited = new Set(sorted.map(n => n.id));
         graphData.nodes.forEach(n => {
@@ -273,21 +263,16 @@
       const totalMinutes = Math.round(totalSeconds / 60);
 
       document.getElementById('stats-summary').innerText = 
-        `${orderedCurriculum.length} lecciones atómicas • ${totalMinutes} min de contenido seleccionado`;
-      document.getElementById('lesson-count-text').innerText = 
-        `${orderedCurriculum.length} lecciones secuenciales`;
+        `${orderedCurriculum.length} segmentos indexados • ${totalMinutes} min totales`;
     }
 
     function renderExternalPrerequisites() {
       const prereqs = graphData.external_prerequisites || [];
       if (prereqs.length > 0) {
-        document.getElementById('external-prereq-badge').classList.remove('hidden');
         document.getElementById('external-warning-card').classList.remove('hidden');
-        
         const container = document.getElementById('external-tags-list');
         container.innerHTML = prereqs.map(p => `
-          <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-amber-500/30 text-amber-300 font-mono text-[11px] flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+          <span class="px-2 py-0.5 rounded bg-[#201d18] border border-[#4d3d20] text-[#e0a84c] font-mono text-[10px]">
             ${p}
           </span>
         `).join('');
@@ -317,8 +302,8 @@
 
       if (list.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-16 text-slate-500 text-xs">
-            No se encontraron lecciones que coincidan con "${filterTerm}".
+          <div class="text-center py-12 text-[#6b6f7c] font-mono text-xs">
+            Sin resultados para "${filterTerm}".
           </div>
         `;
         return;
@@ -328,77 +313,75 @@
         const meta = node.metadata;
         const startSec = meta.start_time || 0;
         const endSec = meta.end_time || 0;
-        const durationSec = Math.max(0, endSec - startSec);
-        const durationMin = Math.round(durationSec / 60);
         const isFoundational = (meta.concepts_required || []).length === 0;
+        const stepNum = (index + 1).toString().padStart(2, '0');
 
         const card = document.createElement('div');
-        card.className = "group relative bg-slate-900/70 hover:bg-slate-900 border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-5 transition-all shadow-md hover:shadow-indigo-500/5";
+        card.className = "bg-[#181920] border border-[#282a32] hover:border-[#383b48] rounded-md p-4 transition";
 
         card.innerHTML = `
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-start justify-between gap-4">
             
-            <!-- Step Info -->
-            <div class="flex items-start gap-4">
-              <!-- Step Number Badge -->
-              <div class="w-10 h-10 rounded-xl ${isFoundational ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30'} flex flex-col items-center justify-center shrink-0 font-bold">
-                <span class="text-[9px] uppercase tracking-wider font-mono">Paso</span>
-                <span class="text-xs leading-none">${index + 1}</span>
-              </div>
+            <!-- Index & Content -->
+            <div class="flex items-start gap-3.5 min-w-0">
+              <span class="font-mono text-xs font-semibold text-[#6b6f7c] shrink-0 pt-0.5">${stepNum}</span>
 
-              <!-- Content Description -->
-              <div class="space-y-1.5">
+              <div class="space-y-1.5 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-medium">
-                    Minuto ${formatTime(startSec)} a ${formatTime(endSec)} (${durationMin} min)
+                  <span class="font-mono text-[10px] text-[#9ea2ae] bg-[#22242c] px-2 py-0.5 rounded border border-[#2d303a]">
+                    ${formatTime(startSec)} – ${formatTime(endSec)}
                   </span>
                   ${isFoundational ? `
-                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-                      Punto de Partida
+                    <span class="font-mono text-[10px] text-[#10b981] bg-[#14261f] border border-[#1f4738] px-1.5 py-0.2 rounded">
+                      Fundacional
                     </span>
                   ` : `
-                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">
-                      Avanza sobre temas previos
+                    <span class="font-mono text-[10px] text-[#3b82f6] bg-[#172338] border border-[#233a61] px-1.5 py-0.2 rounded">
+                      Dependiente
                     </span>
                   `}
                 </div>
 
-                <h4 class="text-sm font-bold text-slate-100 group-hover:text-indigo-300 transition line-clamp-1">
+                <h4 class="text-xs font-semibold text-[#e6e7eb] truncate">
                   ${meta.video_title}
                 </h4>
 
-                <!-- Concepts Tags -->
-                <div class="flex items-center gap-1.5 flex-wrap pt-1">
-                  <span class="text-[11px] font-semibold text-emerald-400 font-mono">Aprenderás:</span>
-                  ${(meta.concepts_taught || []).map(c => `
-                    <span class="text-[11px] px-2 py-0.5 rounded-md bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 font-mono">
-                      ${c}
-                    </span>
-                  `).join('') || '<span class="text-[11px] text-slate-500">Fundamentos</span>'}
-                </div>
+                <!-- Concepts Rows -->
+                <div class="space-y-1 pt-1 text-[11px] font-mono">
+                  ${(meta.concepts_taught || []).length > 0 ? `
+                    <div class="flex items-baseline gap-1.5 flex-wrap">
+                      <span class="text-[#6b6f7c] text-[10px]">C_out:</span>
+                      ${meta.concepts_taught.map(c => `
+                        <span class="text-[#10b981] bg-[#15231c] px-1.5 py-0.5 rounded border border-[#1d3d2e] text-[10px]">
+                          ${c}
+                        </span>
+                      `).join('')}
+                    </div>
+                  ` : ''}
 
-                ${(meta.concepts_required || []).length > 0 ? `
-                  <div class="flex items-center gap-1.5 flex-wrap pt-0.5">
-                    <span class="text-[11px] font-semibold text-slate-400 font-mono">Requiere:</span>
-                    ${meta.concepts_required.map(r => `
-                      <span class="text-[11px] px-2 py-0.5 rounded-md bg-slate-800/80 border border-slate-700/60 text-slate-400 font-mono">
-                        ${r}
-                      </span>
-                    `).join('')}
-                  </div>
-                ` : ''}
+                  ${(meta.concepts_required || []).length > 0 ? `
+                    <div class="flex items-baseline gap-1.5 flex-wrap">
+                      <span class="text-[#6b6f7c] text-[10px]">C_in:</span>
+                      ${meta.concepts_required.map(r => `
+                        <span class="text-[#9ea2ae] bg-[#20222a] px-1.5 py-0.5 rounded border border-[#2e313c] text-[10px]">
+                          ${r}
+                        </span>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                </div>
               </div>
             </div>
 
-            <!-- Action Button: Open YouTube directly at exact timestamp -->
-            <div class="shrink-0 flex sm:flex-col items-center sm:items-end justify-between gap-2 border-t sm:border-t-0 border-slate-800/80 pt-3 sm:pt-0">
+            <!-- Actions -->
+            <div class="flex flex-col items-end gap-2 shrink-0">
               <a href="https://youtube.com/watch?v=${meta.video_id}&t=${startSec}s" target="_blank"
-                 class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-                <span>Ver lección</span>
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                 class="px-2.5 py-1 rounded bg-[#24262f] hover:bg-[#2e313d] text-xs font-mono text-[#e6e7eb] border border-[#363944] transition flex items-center gap-1.5">
+                <span>Ver</span>
+                <span class="text-[#6b6f7c]">↗</span>
               </a>
-              <button onclick="inspectInGraph('${node.id}')" class="text-[11px] text-slate-400 hover:text-indigo-400 font-medium transition">
-                Ver en mapa mental ↗
+              <button onclick="inspectInGraph('${node.id}')" class="text-[10px] font-mono text-[#6b6f7c] hover:text-[#9ea2ae] transition">
+                Grafo ➜
               </button>
             </div>
 
@@ -428,17 +411,16 @@
       const containerGraph = document.getElementById('view-graph-container');
 
       if (view === 'roadmap') {
-        btnRoadmap.className = "px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm transition flex items-center gap-1.5";
-        btnGraph.className = "px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 font-medium transition flex items-center gap-1.5";
+        btnRoadmap.className = "px-3 py-1 rounded bg-[#2a2c35] text-[#e6e7eb] font-medium transition flex items-center gap-1.5 border border-[#383b47]";
+        btnGraph.className = "px-3 py-1 rounded text-[#9ea2ae] hover:text-[#e6e7eb] transition flex items-center gap-1.5";
         containerRoadmap.classList.remove('hidden');
         containerGraph.classList.add('hidden');
       } else {
-        btnGraph.className = "px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm transition flex items-center gap-1.5";
-        btnRoadmap.className = "px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 font-medium transition flex items-center gap-1.5";
+        btnGraph.className = "px-3 py-1 rounded bg-[#2a2c35] text-[#e6e7eb] font-medium transition flex items-center gap-1.5 border border-[#383b47]";
+        btnRoadmap.className = "px-3 py-1 rounded text-[#9ea2ae] hover:text-[#e6e7eb] transition flex items-center gap-1.5";
         containerGraph.classList.remove('hidden');
         containerRoadmap.classList.add('hidden');
 
-        // Lazy load vis-network on first switch
         if (!network) {
           buildVisNetwork();
         } else {
@@ -451,7 +433,7 @@
       switchMainView('graph');
       setTimeout(() => {
         if (network) {
-          network.focus(nodeId, { scale: 1.2, animation: { duration: 600 } });
+          network.focus(nodeId, { scale: 1.1, animation: { duration: 500 } });
           showGraphPathModal(nodeId);
         }
       }, 100);
@@ -468,16 +450,16 @@
         return {
           id: n.id,
           label: `${titleShort}\n[${formatTime(startSec)}]`,
-          title: `<b>${n.metadata.video_title}</b><br>Segmento: ${startSec}s a ${n.metadata.end_time}s<br><br><b>Enseña:</b> ${(n.metadata.concepts_taught || []).join(', ') || 'General'}`,
+          title: `${n.metadata.video_title}\n(${startSec}s - ${n.metadata.end_time}s)`,
           color: {
-            background: isFoundational ? '#059669' : '#4338ca',
-            border: isFoundational ? '#10b981' : '#6366f1',
-            highlight: { background: '#9333ea', border: '#c084fc' }
+            background: isFoundational ? '#182d23' : '#1c2230',
+            border: isFoundational ? '#29543e' : '#314467',
+            highlight: { background: '#262833', border: '#4f566b' }
           },
-          font: { color: '#ffffff', size: 12, face: 'Plus Jakarta Sans, sans-serif' },
+          font: { color: '#e6e7eb', size: 11, face: 'IBM Plex Mono, monospace' },
           shape: 'box',
-          margin: 10,
-          borderWidth: 2,
+          margin: 9,
+          borderWidth: 1,
           data: n.metadata
         };
       });
@@ -486,10 +468,10 @@
         id: `${e.source}->${e.target}`,
         from: e.source,
         to: e.target,
-        arrows: { to: { enabled: true, scaleFactor: 1.0 } },
-        color: { color: '#64748b', highlight: '#c084fc' },
-        width: 1.5,
-        smooth: { type: 'cubicBezier', roundness: 0.3 }
+        arrows: { to: { enabled: true, scaleFactor: 0.8 } },
+        color: { color: '#363945', highlight: '#70768b' },
+        width: 1.2,
+        smooth: { type: 'cubicBezier', roundness: 0.2 }
       }));
 
       nodesDataSet = new vis.DataSet(allNodesRaw);
@@ -501,11 +483,11 @@
     function renderNetworkWithOptions() {
       const container = document.getElementById('graph-container');
       const options = {
-        layout: { hierarchical: { enabled: currentLayout === 'hierarchical', direction: 'LR', nodeSpacing: 140 } },
+        layout: { hierarchical: { enabled: currentLayout === 'hierarchical', direction: 'LR', nodeSpacing: 120 } },
         physics: {
           enabled: currentLayout === 'organic',
           solver: 'forceAtlas2Based',
-          forceAtlas2Based: { gravitationalConstant: -60, springLength: 140, avoidOverlap: 0.8 }
+          forceAtlas2Based: { gravitationalConstant: -50, springLength: 130, avoidOverlap: 0.9 }
         },
         interaction: { hover: true, tooltipDelay: 100 }
       };
@@ -515,8 +497,7 @@
 
       network.on("click", function(params) {
         if (params.nodes.length > 0) {
-          const selectedId = params.nodes[0];
-          showGraphPathModal(selectedId);
+          showGraphPathModal(params.nodes[0]);
         }
       });
     }
@@ -524,11 +505,11 @@
     function switchLayout(mode) {
       currentLayout = mode;
       document.getElementById('btn-sub-organic').className = mode === 'organic' 
-        ? "flex-1 py-1 px-2 rounded-lg bg-indigo-600 text-white text-[11px] font-semibold"
-        : "flex-1 py-1 px-2 rounded-lg bg-slate-800 text-slate-400 text-[11px] font-medium";
+        ? "flex-1 py-1 px-2 rounded bg-[#2a2c35] text-[#e6e7eb] font-mono text-[11px] border border-[#383b47]"
+        : "flex-1 py-1 px-2 rounded text-[#6b6f7c] font-mono text-[11px] hover:text-[#9ea2ae]";
       document.getElementById('btn-sub-hierarchical').className = mode === 'hierarchical'
-        ? "flex-1 py-1 px-2 rounded-lg bg-indigo-600 text-white text-[11px] font-semibold"
-        : "flex-1 py-1 px-2 rounded-lg bg-slate-800 text-slate-400 text-[11px] font-medium";
+        ? "flex-1 py-1 px-2 rounded bg-[#2a2c35] text-[#e6e7eb] font-mono text-[11px] border border-[#383b47]"
+        : "flex-1 py-1 px-2 rounded text-[#6b6f7c] font-mono text-[11px] hover:text-[#9ea2ae]";
       renderNetworkWithOptions();
     }
 
@@ -541,7 +522,6 @@
       titleEl.innerText = targetNode ? targetNode.data.video_title : targetId;
       modal.classList.remove('hidden');
 
-      // Fetch path from Go API or fallback
       let steps = [];
       try {
         const res = await fetch(`/api/path?target=${encodeURIComponent(targetId)}`);
@@ -550,16 +530,16 @@
           steps = data.steps || [];
         }
       } catch (e) {
-        console.warn("API offline, showing direct target");
+        console.warn("API offline");
       }
 
       stepsContainer.innerHTML = steps.map((s, idx) => `
-        <div class="bg-slate-800/80 p-2 rounded-lg text-xs flex justify-between items-center">
+        <div class="bg-[#20222a] p-2 rounded text-[11px] font-mono flex justify-between items-center border border-[#2b2e3a]">
           <div>
-            <div class="font-bold text-slate-200">Paso ${idx + 1}</div>
-            <div class="text-[10px] text-slate-400">${s.segment_id}</div>
+            <div class="text-[#e6e7eb]">Paso ${(idx + 1).toString().padStart(2, '0')}</div>
+            <div class="text-[10px] text-[#6b6f7c]">${s.segment_id}</div>
           </div>
-          <a href="https://youtube.com/watch?v=${s.video_id}&t=${s.start_time}s" target="_blank" class="text-[10px] text-indigo-400 hover:underline">
+          <a href="https://youtube.com/watch?v=${s.video_id}&t=${s.start_time}s" target="_blank" class="text-[#3b82f6] hover:underline text-[10px]">
             Ver ↗
           </a>
         </div>
