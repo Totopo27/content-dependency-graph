@@ -26,6 +26,13 @@ func NewGraphBuilder() *GraphBuilder {
 	}
 }
 
+func (gb *GraphBuilder) AddManualNode(node domain.GraphNode) {
+	gb.nodes[node.ID] = node
+	if _, exists := gb.inDeg[node.ID]; !exists {
+		gb.inDeg[node.ID] = 0
+	}
+}
+
 func (gb *GraphBuilder) AddManualEdge(sourceID, targetID string) {
 	gb.edges[sourceID] = append(gb.edges[sourceID], targetID)
 	gb.inDeg[targetID]++

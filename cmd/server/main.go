@@ -15,22 +15,40 @@ import (
 
 func main() {
 	port := flag.Int("port", 8080, "HTTP server port")
-	fixturePath := flag.String("fixture", filepath.Join("tests", "fixtures", "sample_channel_data.json"), "Path to sample catalog JSON")
+	fixturePath := flag.String("fixture", filepath.Join("web", "curriculum_graph.json"), "Path to curriculum graph JSON or catalog JSON")
 	flag.Parse()
 
 	data, err := os.ReadFile(*fixturePath)
 	if err != nil {
-		log.Fatalf("Failed to read fixture: %v", err)
+		log.Fatalf("Failed to read graph/catalog data: %v", err)
 	}
 
-	var catalog domain.ChannelCatalog
-	if err := json.Unmarshal(data, &catalog); err != nil {
-		log.Fatalf("Failed to unmarshal catalog: %v", err)
-	}
+	var curriculum *domain.CurriculumGraph
+	var solver *graph.PathSolver
 
-	builder := graph.NewGraphBuilder()
-	curriculum := builder.BuildFromCatalog(catalog)
-	solver := graph.NewPathSolver(builder)
+	// First try unmarshaling as CurriculumGraph directly
+	var directCurriculum domain.CurriculumGraph
+	if err := json.Unmarshal(data, &directCurriculum); err == nil && len(directCurriculum.Nodes) > 0 {
+		curriculum = &directCurriculum
+		// Build graph builder from curriculum nodes & edges for solver
+		builder := graph.NewGraphBuilder()
+		for _, node := range curriculum.Nodes {
+			builder.AddManualNode(node)
+		}
+		for _, edge := range curriculum.Edges {
+			builder.AddManualEdge(edge.Source, edge.Target)
+		}
+		solver = graph.NewPathSolver(builder)
+	} else {
+		// Fallback to unmarshaling as ChannelCatalog
+		var catalog domain.ChannelCatalog
+		if err := json.Unmarshal(data, &catalog); err != nil {
+			log.Fatalf("Failed to unmarshal data as CurriculumGraph or ChannelCatalog: %v", err)
+		}
+		builder := graph.NewGraphBuilder()
+		curriculum = builder.BuildFromCatalog(catalog)
+		solver = graph.NewPathSolver(builder)
+	}
 
 	// API: Get entire curriculum graph
 	http.HandleFunc("/api/graph", func(w http.ResponseWriter, r *http.Request) {

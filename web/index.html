@@ -102,7 +102,14 @@
 
     async function init() {
       try {
-        const response = await fetch('./curriculum_graph.json');
+        // Try fetching from the Go backend API first, with fallback to local JSON file
+        let response;
+        try {
+          response = await fetch('/api/graph');
+          if (!response.ok) throw new Error('API status not ok');
+        } catch {
+          response = await fetch('./curriculum_graph.json');
+        }
         graphData = await response.json();
         
         document.getElementById('channel-title').innerText = `${graphData.channel_title} (${graphData.channel_id})`;
@@ -181,8 +188,23 @@
       });
     }
 
-    function computeAndDisplayPath(targetId) {
-      // Find all upstream ancestors using BFS backward
+    async function computeAndDisplayPath(targetId) {
+      // 1. First attempt: Ask the Go backend API for the topological path
+      try {
+        const response = await fetch(`/api/path?target=${encodeURIComponent(targetId)}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.steps && Array.isArray(data.steps)) {
+            const serverOrderedIds = data.steps.map(s => s.segment_id);
+            renderPathUI(serverOrderedIds, targetId);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("Backend API not reachable, falling back to client-side solver:", e);
+      }
+
+      // 2. Client-side fallback solver (BFS backward + Kahn/DFS)
       const ancestors = new Set();
       const queue = [targetId];
 
