@@ -3,12 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Content Dependency Graph - Curricular Roadmap</title>
+  <title>Content Dependency Graph - Ruta de Aprendizaje</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
     #graph-container {
-      height: calc(100vh - 64px);
+      height: calc(100vh - 73px);
       width: 100%;
       background: radial-gradient(#1e293b 1.5px, transparent 1.5px);
       background-size: 24px 24px;
@@ -17,396 +26,435 @@
       width: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.6);
+      background: transparent;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(51, 65, 85, 0.8);
-      border-radius: 3px;
+      background: rgba(51, 65, 85, 0.6);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(71, 85, 105, 0.9);
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden font-sans">
+<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden antialiased">
 
-  <!-- Header -->
-  <header class="h-16 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-900/80 backdrop-blur z-20">
-    <div class="flex items-center space-x-3">
-      <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center font-black text-white shadow-lg shadow-indigo-500/25 text-sm">
+  <!-- Top Navigation Bar -->
+  <header class="h-[72px] border-b border-slate-800/80 px-8 flex items-center justify-between bg-slate-900/90 backdrop-blur-md z-30 shrink-0">
+    <!-- Left: Brand & Course Info -->
+    <div class="flex items-center space-x-4">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-extrabold text-white shadow-lg shadow-indigo-500/20 text-base tracking-tight">
         CDG
       </div>
       <div>
-        <h1 class="text-sm font-semibold text-slate-100 flex items-center gap-2">
-          Content Dependency Graph
-          <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-medium">DAG Active</span>
-          <span id="nodes-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">0 Nodos</span>
-        </h1>
-        <p id="channel-title" class="text-xs text-slate-400">Cargando catálogo...</p>
+        <div class="flex items-center gap-2">
+          <h1 id="channel-title" class="text-sm font-bold text-slate-100">Cargando curso...</h1>
+          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Ordenado Pedagógicamente</span>
+        </div>
+        <p class="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+          <span id="stats-summary">Analizando catálogo...</span>
+        </p>
       </div>
     </div>
     
-    <div class="flex items-center space-x-3">
-      <!-- Layout Mode Toggle -->
-      <div class="flex rounded-lg bg-slate-800/80 p-0.5 border border-slate-700 text-xs">
-        <button id="btn-layout-organic" onclick="switchLayout('organic')" class="px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium shadow-sm transition">
-          Constelación (Física)
-        </button>
-        <button id="btn-layout-hierarchical" onclick="switchLayout('hierarchical')" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition">
-          Jerarquía (LR)
-        </button>
+    <!-- Right: View Switcher (Roadmap vs Grafo) -->
+    <div class="flex items-center space-x-4">
+      <!-- Search Input -->
+      <div class="relative w-64 hidden md:block">
+        <input type="text" id="concept-search" oninput="handleSearch(this.value)" placeholder="Buscar tema (ej: PRs, retro)..."
+               class="w-full bg-slate-800/80 border border-slate-700/80 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
 
-      <div class="text-xs text-slate-400 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-800">
-        Prerrequisitos Externos: <span id="external-count" class="text-amber-400 font-bold">0</span>
+      <!-- Main Mode Switcher -->
+      <div class="flex rounded-xl bg-slate-800/80 p-1 border border-slate-700/80 text-xs shadow-inner">
+        <button id="btn-view-roadmap" onclick="switchMainView('roadmap')" 
+                class="px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm transition flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+          Plan de Estudio
+        </button>
+        <button id="btn-view-graph" onclick="switchMainView('graph')" 
+                class="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 font-medium transition flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          Mapa Conceptual (Grafo)
+        </button>
       </div>
-
-      <button onclick="resetView()" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
-        Centrar Vista
-      </button>
     </div>
   </header>
 
-  <!-- Main Workspace -->
-  <div class="flex flex-1 relative overflow-hidden">
-    
-    <!-- Graph Viewport -->
-    <div class="flex-1 relative">
-      <div id="graph-container"></div>
+  <!-- Content Container -->
+  <main class="flex-1 relative overflow-hidden bg-slate-950">
+
+    <!-- VIEW 1: CLEAN ROADMAP & TIMELINE (Default Primary View) -->
+    <div id="view-roadmap-container" class="h-full overflow-y-auto custom-scrollbar px-6 py-8 max-w-5xl mx-auto space-y-8">
       
-      <!-- Video Filter Controls Overlay (Top-Left) -->
-      <div class="absolute top-4 left-4 bg-slate-900/90 border border-slate-800 p-3 rounded-xl text-xs backdrop-blur shadow-2xl z-10 max-w-sm">
-        <div class="font-semibold text-slate-200 mb-1.5 flex items-center justify-between">
-          <span>Filtrar por Video / Fuente:</span>
-          <button onclick="filterByVideo('all')" class="text-[10px] text-indigo-400 hover:underline">Ver todos</button>
+      <!-- Welcome Hero Card -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-3">
+            <span>✨ Guía de Aprendizaje Sin Relleno</span>
+          </div>
+          <h2 class="text-xl font-extrabold text-slate-100 tracking-tight">Ruta sugerida para dominar este contenido</h2>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            Organizamos todos los videos del canal en el orden lógico en que debés mirarlos. Cada lección apunta al minuto exacto donde se explica el concepto, sin que tengas que adivinar qué ver primero.
+          </p>
+          <div class="flex items-center gap-3 mt-4">
+            <button onclick="startFromBeginning()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Comenzar desde la Lección 1
+            </button>
+            <div id="external-prereq-badge" class="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-2 rounded-xl font-medium hidden">
+              ⚠️ Este curso asume conocimientos previos
+            </div>
+          </div>
         </div>
-        <select id="video-select" onchange="filterByVideo(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-          <option value="all">Todos los videos del catálogo</option>
-        </select>
       </div>
 
-      <!-- Legend Overlay (Bottom-Left) -->
-      <div class="absolute bottom-4 left-4 bg-slate-900/90 border border-slate-800 p-3.5 rounded-xl text-xs backdrop-blur shadow-2xl space-y-2 pointer-events-none z-10">
-        <div class="font-semibold text-slate-200">Leyenda del Grafo</div>
-        <div class="flex items-center gap-2.5">
-          <span class="w-3.5 h-3.5 rounded-md bg-emerald-500 shadow-sm shadow-emerald-500/50"></span>
-          <span class="text-slate-300">Fundacional (Sin prerrequisitos internos)</span>
+      <!-- External Prerequisites Callout if any -->
+      <div id="external-warning-card" class="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-5 hidden">
+        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2 mb-1">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Lo que el autor da por sabido antes de empezar
+        </h3>
+        <p class="text-xs text-slate-400 mb-3">El autor menciona estos conceptos en sus videos asumiendo que ya los conocés de antemano:</p>
+        <div id="external-tags-list" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Step-by-Step Curriculum Timeline -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="text-sm font-bold text-slate-200">Secuencia Curricular Recomendada</h3>
+          <span id="lesson-count-text" class="text-xs text-slate-400 font-mono">0 lecciones ordenadas</span>
         </div>
-        <div class="flex items-center gap-2.5">
-          <span class="w-3.5 h-3.5 rounded-md bg-indigo-500 shadow-sm shadow-indigo-500/50"></span>
-          <span class="text-slate-300">Intermedio / Dependiente</span>
+
+        <!-- Timeline Cards Container -->
+        <div id="timeline-steps-container" class="space-y-4">
+          <!-- Populated by JavaScript -->
         </div>
-        <div class="flex items-center gap-2.5">
-          <span class="w-3.5 h-3.5 rounded-md bg-purple-500 shadow-sm shadow-purple-500/50"></span>
-          <span class="text-slate-300">Segmento Seleccionado (Objetivo)</span>
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: INTERACTIVE GRAPH (Alternative Exploratory View) -->
+    <div id="view-graph-container" class="h-full w-full hidden relative">
+      <div id="graph-container"></div>
+      
+      <!-- Graph Controls Float Overlay -->
+      <div class="absolute top-4 left-4 bg-slate-900/95 border border-slate-800 p-3.5 rounded-2xl text-xs backdrop-blur shadow-2xl z-10 space-y-2 max-w-xs">
+        <div class="font-bold text-slate-200">Explorador de Dependencias</div>
+        <p class="text-[11px] text-slate-400">Hacé clic en cualquier nodo para ver qué lecciones previas necesitás para entenderlo.</p>
+        <div class="pt-1 flex gap-2">
+          <button onclick="switchLayout('organic')" id="btn-sub-organic" class="flex-1 py-1 px-2 rounded-lg bg-indigo-600 text-white text-[11px] font-semibold">
+            Constelación
+          </button>
+          <button onclick="switchLayout('hierarchical')" id="btn-sub-hierarchical" class="flex-1 py-1 px-2 rounded-lg bg-slate-800 text-slate-400 text-[11px] font-medium">
+            Jerárquico
+          </button>
         </div>
-        <div class="flex items-center gap-2.5">
-          <span class="w-6 h-0.5 bg-purple-400"></span>
-          <span class="text-slate-300">Camino Topológico Activo</span>
+      </div>
+
+      <!-- Selected Path Floating Modal on Click -->
+      <div id="graph-selected-path-card" class="absolute bottom-6 right-6 w-96 bg-slate-900/95 border border-indigo-500/40 p-4 rounded-2xl shadow-2xl backdrop-blur z-20 hidden">
+        <div class="flex items-start justify-between mb-2">
+          <div>
+            <span class="text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full">Ruta Calculada</span>
+            <h4 id="modal-path-title" class="text-xs font-bold text-slate-100 mt-1 line-clamp-1">Objetivo</h4>
+          </div>
+          <button onclick="closeGraphModal()" class="text-slate-400 hover:text-slate-200 text-xs p-1">✕</button>
         </div>
+        <p id="modal-path-desc" class="text-[11px] text-slate-400 mb-3">Pasos necesarios para este video:</p>
+        <div id="modal-path-steps" class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar pr-1"></div>
       </div>
     </div>
 
-    <!-- Enhanced Sidebar with Tabs: Roadmap | Videos | Selected Path -->
-    <aside class="w-[450px] border-l border-slate-800 bg-slate-900/95 flex flex-col z-10 shadow-2xl">
-      
-      <!-- Tab Header Buttons -->
-      <div class="flex border-b border-slate-800 bg-slate-900 px-3 pt-2 gap-1 text-xs font-medium">
-        <button id="tab-btn-roadmap" onclick="switchSidebarTab('roadmap')" 
-                class="flex-1 py-2 px-2.5 text-center rounded-t-lg border-b-2 border-indigo-500 text-indigo-400 font-semibold bg-slate-800/60 transition flex items-center justify-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-          Roadmap Canal
-        </button>
-        <button id="tab-btn-catalog" onclick="switchSidebarTab('catalog')" 
-                class="flex-1 py-2 px-2.5 text-center rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center justify-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-          Catálogo Videos
-        </button>
-        <button id="tab-btn-path" onclick="switchSidebarTab('path')" 
-                class="flex-1 py-2 px-2.5 text-center rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center justify-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-          Ruta Activa
-          <span id="badge-path-steps" class="ml-1 text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.2 rounded-full border border-slate-700">0</span>
-        </button>
-      </div>
-
-      <!-- Tab Content 1: Full Channel Roadmap (Fases Pedagógicas) -->
-      <div id="tab-content-roadmap" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-        <div class="mb-2">
-          <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Plan de Estudio Progresivo</h3>
-          <p class="text-xs text-slate-400">Secuencia curricular ordenada por niveles de dependencia conceptual.</p>
-        </div>
-        <div id="roadmap-levels-container" class="space-y-4">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-
-      <!-- Tab Content 2: Raw Video Catalog & Segments -->
-      <div id="tab-content-catalog" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar hidden">
-        <div class="mb-2">
-          <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Videos del Canal & Capítulos</h3>
-          <p class="text-xs text-slate-400">Explorá cada video y sus timestamps semánticos.</p>
-        </div>
-        <div id="catalog-videos-container" class="space-y-3">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-
-      <!-- Tab Content 3: Active Target Learning Path -->
-      <div id="tab-content-path" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar hidden">
-        <div class="mb-1 flex items-center justify-between">
-          <div>
-            <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Ruta Óptima Seleccionada</h3>
-            <p class="text-xs text-slate-400">Secuencia topológica previa para el objetivo.</p>
-          </div>
-          <span id="path-step-count" class="text-indigo-400 font-mono text-[11px] font-bold">0 pasos</span>
-        </div>
-        
-        <div id="path-list" class="space-y-3">
-          <div class="text-center py-16 text-slate-500 text-xs px-6">
-            <svg class="w-10 h-10 mx-auto text-slate-600 mb-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            Seleccioná cualquier segmento en el grafo o en el catálogo para calcular sus prerrequisitos exactos.
-          </div>
-        </div>
-      </div>
-
-      <!-- External Prerequisites Banner (Always at bottom) -->
-      <div id="external-box" class="p-4 border-t border-slate-800 bg-amber-500/5 hidden">
-        <h3 class="text-xs font-semibold text-amber-400 mb-1 flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-          Prerrequisitos Externos Requeridos
-        </h3>
-        <p class="text-xs text-slate-400 mb-2">Conceptos asumidos como conocimiento previo por el creador:</p>
-        <div id="external-tags" class="flex flex-wrap gap-1.5 max-h-20 overflow-y-auto custom-scrollbar"></div>
-      </div>
-    </aside>
-
-  </div>
+  </main>
 
   <script>
-    let network = null;
     let graphData = null;
+    let network = null;
     let nodesDataSet = null;
     let edgesDataSet = null;
-    let currentLayout = 'organic';
-    let currentSidebarTab = 'roadmap';
     let allNodesRaw = [];
     let allEdgesRaw = [];
+    let currentLayout = 'organic';
+    let currentMainView = 'roadmap';
+    let orderedCurriculum = [];
 
     async function init() {
       try {
         let response;
         try {
           response = await fetch('/api/graph');
-          if (!response.ok) throw new Error('API status not ok');
+          if (!response.ok) throw new Error('API offline');
         } catch {
           response = await fetch('./curriculum_graph.json');
         }
         graphData = await response.json();
+
+        // Update Header Titles
+        document.getElementById('channel-title').innerText = graphData.channel_title || "Canal Educativo";
         
-        document.getElementById('channel-title').innerText = `${graphData.channel_title} (${graphData.channel_id})`;
-        document.getElementById('nodes-badge').innerText = `${graphData.nodes.length} Segmentos`;
-        document.getElementById('external-count').innerText = graphData.external_prerequisites.length;
+        // Compute and sort topological curriculum
+        computeTopologicalCurriculum();
 
-        // Populate video filter select
-        populateVideoFilter();
+        // Render UI
+        renderHeaderStats();
+        renderExternalPrerequisites();
+        renderTimelineRoadmap();
 
-        // Populate Catalog Tab & Roadmap Tab textually
-        renderTextCatalog();
-        renderRoadmapPhases();
-
-        // Render external prerequisites
-        if (graphData.external_prerequisites.length > 0) {
-          const extBox = document.getElementById('external-box');
-          const extTags = document.getElementById('external-tags');
-          extBox.classList.remove('hidden');
-          extTags.innerHTML = graphData.external_prerequisites.map(p => 
-            `<span class="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-[11px]">${p}</span>`
-          ).join('');
-        }
-
-        buildVisNetwork();
       } catch (err) {
-        console.error("Error cargando grafo:", err);
-        document.getElementById('channel-title').innerText = "Error cargando curriculum_graph.json";
+        console.error("Error al inicializar:", err);
+        document.getElementById('channel-title').innerText = "Error cargando datos del curso";
       }
     }
 
-    function switchSidebarTab(tab) {
-      currentSidebarTab = tab;
-      const tabs = ['roadmap', 'catalog', 'path'];
+    function computeTopologicalCurriculum() {
+      // Build adjacency and in-degree maps
+      const inDeg = new Map();
+      const adj = new Map();
+      const nodeMap = new Map();
 
-      tabs.forEach(t => {
-        const btn = document.getElementById(`tab-btn-${t}`);
-        const content = document.getElementById(`tab-content-${t}`);
-        if (t === tab) {
-          btn.className = "flex-1 py-2 px-2.5 text-center rounded-t-lg border-b-2 border-indigo-500 text-indigo-400 font-semibold bg-slate-800/60 transition flex items-center justify-center gap-1.5";
-          content.classList.remove('hidden');
-        } else {
-          btn.className = "flex-1 py-2 px-2.5 text-center rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center justify-center gap-1.5";
-          content.classList.add('hidden');
-        }
+      graphData.nodes.forEach(n => {
+        inDeg.set(n.id, 0);
+        adj.set(n.id, []);
+        nodeMap.set(n.id, n);
       });
+
+      graphData.edges.forEach(e => {
+        adj.get(e.source).push(e.target);
+        inDeg.set(e.target, (inDeg.get(e.target) || 0) + 1);
+      });
+
+      // Kahn's Topological Sort with tie-breaking by published_at / startTime
+      const queue = [];
+      inDeg.forEach((deg, id) => {
+        if (deg === 0) queue.push(id);
+      });
+
+      // Sort initial queue chronologically
+      queue.sort((a, b) => {
+        const nA = nodeMap.get(a).metadata;
+        const nB = nodeMap.get(b).metadata;
+        if (nA.published_at !== nB.published_at) {
+          return (nA.published_at || '').localeCompare(nB.published_at || '');
+        }
+        return (nA.start_time || 0) - (nB.start_time || 0);
+      });
+
+      const sorted = [];
+      while (queue.length > 0) {
+        const curr = queue.shift();
+        sorted.push(nodeMap.get(curr));
+
+        for (const neighbor of adj.get(curr)) {
+          inDeg.set(neighbor, inDeg.get(neighbor) - 1);
+          if (inDeg.get(neighbor) === 0) {
+            queue.push(neighbor);
+          }
+        }
+      }
+
+      // If any cycle or unreached nodes remain, append remaining
+      if (sorted.length < graphData.nodes.length) {
+        const visited = new Set(sorted.map(n => n.id));
+        graphData.nodes.forEach(n => {
+          if (!visited.has(n.id)) sorted.push(n);
+        });
+      }
+
+      orderedCurriculum = sorted;
     }
 
-    function renderTextCatalog() {
-      const container = document.getElementById('catalog-videos-container');
+    function renderHeaderStats() {
+      const totalSeconds = orderedCurriculum.reduce((acc, n) => {
+        const dur = (n.metadata.end_time || 0) - (n.metadata.start_time || 0);
+        return acc + Math.max(0, dur);
+      }, 0);
+      const totalMinutes = Math.round(totalSeconds / 60);
+
+      document.getElementById('stats-summary').innerText = 
+        `${orderedCurriculum.length} lecciones atómicas • ${totalMinutes} min de contenido seleccionado`;
+      document.getElementById('lesson-count-text').innerText = 
+        `${orderedCurriculum.length} lecciones secuenciales`;
+    }
+
+    function renderExternalPrerequisites() {
+      const prereqs = graphData.external_prerequisites || [];
+      if (prereqs.length > 0) {
+        document.getElementById('external-prereq-badge').classList.remove('hidden');
+        document.getElementById('external-warning-card').classList.remove('hidden');
+        
+        const container = document.getElementById('external-tags-list');
+        container.innerHTML = prereqs.map(p => `
+          <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-amber-500/30 text-amber-300 font-mono text-[11px] flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            ${p}
+          </span>
+        `).join('');
+      }
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function renderTimelineRoadmap(filterTerm = '') {
+      const container = document.getElementById('timeline-steps-container');
       container.innerHTML = '';
 
-      // Group nodes by video_id
-      const videoGroups = new Map();
-      graphData.nodes.forEach(n => {
-        const vidId = n.metadata.video_id;
-        if (!videoGroups.has(vidId)) {
-          videoGroups.set(vidId, {
-            title: n.metadata.video_title,
-            segments: []
-          });
-        }
-        videoGroups.get(vidId).segments.push(n);
-      });
+      let list = orderedCurriculum;
+      if (filterTerm) {
+        const term = filterTerm.toLowerCase().trim();
+        list = orderedCurriculum.filter(n => {
+          const title = (n.metadata.video_title || '').toLowerCase();
+          const taught = (n.metadata.concepts_taught || []).join(' ').toLowerCase();
+          const req = (n.metadata.concepts_required || []).join(' ').toLowerCase();
+          return title.includes(term) || taught.includes(term) || req.includes(term);
+        });
+      }
 
-      videoGroups.forEach((vData, vidId) => {
-        const videoCard = document.createElement('div');
-        videoCard.className = "bg-slate-800/50 border border-slate-700/70 rounded-xl p-3.5 space-y-2.5";
-        
-        videoCard.innerHTML = `
-          <div class="flex items-start justify-between gap-2 border-b border-slate-700/40 pb-2">
-            <div>
-              <h4 class="text-xs font-semibold text-slate-100 line-clamp-1">${vData.title}</h4>
-              <span class="text-[10px] text-slate-400 font-mono">${vData.segments.length} capítulos / segmentos</span>
-            </div>
-            <a href="https://youtube.com/watch?v=${vidId}" target="_blank" class="text-[10px] text-indigo-400 hover:text-indigo-300 font-mono flex items-center gap-0.5">
-              YouTube ↗
-            </a>
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-16 text-slate-500 text-xs">
+            No se encontraron lecciones que coincidan con "${filterTerm}".
           </div>
-          <div class="space-y-2">
-            ${vData.segments.map((seg, idx) => `
-              <div class="bg-slate-900/60 border border-slate-700/40 rounded-lg p-2.5 text-xs hover:border-slate-500 transition cursor-pointer"
-                   onclick="selectSegmentFromCatalog('${seg.id}')">
-                <div class="flex items-center justify-between mb-1">
-                  <span class="font-mono text-[10px] font-bold text-slate-300">Capítulo ${idx + 1}</span>
-                  <span class="font-mono text-[10px] text-slate-400">${seg.metadata.start_time}s - ${seg.metadata.end_time}s</span>
+        `;
+        return;
+      }
+
+      list.forEach((node, index) => {
+        const meta = node.metadata;
+        const startSec = meta.start_time || 0;
+        const endSec = meta.end_time || 0;
+        const durationSec = Math.max(0, endSec - startSec);
+        const durationMin = Math.round(durationSec / 60);
+        const isFoundational = (meta.concepts_required || []).length === 0;
+
+        const card = document.createElement('div');
+        card.className = "group relative bg-slate-900/70 hover:bg-slate-900 border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-5 transition-all shadow-md hover:shadow-indigo-500/5";
+
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            
+            <!-- Step Info -->
+            <div class="flex items-start gap-4">
+              <!-- Step Number Badge -->
+              <div class="w-10 h-10 rounded-xl ${isFoundational ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30'} flex flex-col items-center justify-center shrink-0 font-bold">
+                <span class="text-[9px] uppercase tracking-wider font-mono">Paso</span>
+                <span class="text-xs leading-none">${index + 1}</span>
+              </div>
+
+              <!-- Content Description -->
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-medium">
+                    Minuto ${formatTime(startSec)} a ${formatTime(endSec)} (${durationMin} min)
+                  </span>
+                  ${isFoundational ? `
+                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+                      Punto de Partida
+                    </span>
+                  ` : `
+                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">
+                      Avanza sobre temas previos
+                    </span>
+                  `}
                 </div>
-                <div class="text-[10px] text-emerald-400 font-mono mb-1">
-                  + Enseña: ${(seg.metadata.concepts_taught || []).join(', ') || 'General'}
+
+                <h4 class="text-sm font-bold text-slate-100 group-hover:text-indigo-300 transition line-clamp-1">
+                  ${meta.video_title}
+                </h4>
+
+                <!-- Concepts Tags -->
+                <div class="flex items-center gap-1.5 flex-wrap pt-1">
+                  <span class="text-[11px] font-semibold text-emerald-400 font-mono">Aprenderás:</span>
+                  ${(meta.concepts_taught || []).map(c => `
+                    <span class="text-[11px] px-2 py-0.5 rounded-md bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 font-mono">
+                      ${c}
+                    </span>
+                  `).join('') || '<span class="text-[11px] text-slate-500">Fundamentos</span>'}
                 </div>
-                ${(seg.metadata.concepts_required || []).length > 0 ? `
-                  <div class="text-[10px] text-slate-400 font-mono mb-1.5">
-                    - Requiere: ${seg.metadata.concepts_required.join(', ')}
+
+                ${(meta.concepts_required || []).length > 0 ? `
+                  <div class="flex items-center gap-1.5 flex-wrap pt-0.5">
+                    <span class="text-[11px] font-semibold text-slate-400 font-mono">Requiere:</span>
+                    ${meta.concepts_required.map(r => `
+                      <span class="text-[11px] px-2 py-0.5 rounded-md bg-slate-800/80 border border-slate-700/60 text-slate-400 font-mono">
+                        ${r}
+                      </span>
+                    `).join('')}
                   </div>
                 ` : ''}
-                <div class="flex justify-between items-center pt-1 border-t border-slate-800 text-[10px]">
-                  <span class="text-indigo-400 hover:underline font-medium">Calcular Ruta ➜</span>
-                  <a href="https://youtube.com/watch?v=${seg.metadata.video_id}&t=${seg.metadata.start_time}s" target="_blank" onclick="event.stopPropagation()" class="text-slate-400 hover:text-slate-200">
-                    Ver ${seg.metadata.start_time}s ↗
-                  </a>
-                </div>
               </div>
-            `).join('')}
-          </div>
-        `;
-        container.appendChild(videoCard);
-      });
-    }
-
-    function renderRoadmapPhases() {
-      const container = document.getElementById('roadmap-levels-container');
-      container.innerHTML = '';
-
-      // In-degree computation for global levels
-      const inDegree = new Map();
-      graphData.nodes.forEach(n => inDegree.set(n.id, 0));
-      graphData.edges.forEach(e => {
-        inDegree.set(e.target, (inDegree.get(e.target) || 0) + 1);
-      });
-
-      const foundational = graphData.nodes.filter(n => inDegree.get(n.id) === 0);
-      const intermediate = graphData.nodes.filter(n => inDegree.get(n.id) === 1);
-      const advanced = graphData.nodes.filter(n => inDegree.get(n.id) > 1);
-
-      const phases = [
-        {
-          title: "Fase 1: Fundamentos (Punto de Partida)",
-          desc: "Segmentos independientes sin prerrequisitos previos. Podés comenzar por cualquiera de ellos.",
-          color: "border-emerald-500/40 bg-emerald-950/20 text-emerald-400",
-          badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-          nodes: foundational
-        },
-        {
-          title: "Fase 2: Intermedio / Expansión de Habilidades",
-          desc: "Segmentos que construyen directamente sobre uno de los fundamentos anteriores.",
-          color: "border-indigo-500/40 bg-indigo-950/20 text-indigo-400",
-          badgeColor: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
-          nodes: intermediate
-        },
-        {
-          title: "Fase 3: Avanzado / Integración de Flujo",
-          desc: "Técnicas avanzadas que combinan múltiples conceptos previos del canal.",
-          color: "border-purple-500/40 bg-purple-950/20 text-purple-400",
-          badgeColor: "bg-purple-500/20 text-purple-300 border-purple-500/30",
-          nodes: advanced
-        }
-      ];
-
-      phases.forEach(phase => {
-        if (phase.nodes.length === 0) return;
-
-        const phaseEl = document.createElement('div');
-        phaseEl.className = `border rounded-xl p-3.5 space-y-2.5 ${phase.color}`;
-
-        phaseEl.innerHTML = `
-          <div class="border-b border-slate-800 pb-2">
-            <div class="flex items-center justify-between">
-              <h4 class="text-xs font-bold text-slate-100">${phase.title}</h4>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full border ${phase.badgeColor}">${phase.nodes.length} lecciones</span>
             </div>
-            <p class="text-[11px] text-slate-400 mt-0.5">${phase.desc}</p>
-          </div>
-          <div class="space-y-1.5">
-            ${phase.nodes.slice(0, 8).map(n => `
-              <div class="bg-slate-900/80 border border-slate-800 hover:border-slate-600 rounded-lg p-2 text-xs flex items-center justify-between transition cursor-pointer"
-                   onclick="selectSegmentFromCatalog('${n.id}')">
-                <div class="min-w-0 pr-2">
-                  <div class="text-slate-200 font-medium truncate">${n.metadata.video_title}</div>
-                  <div class="text-[10px] text-emerald-400 font-mono truncate">+ ${(n.metadata.concepts_taught || []).join(', ') || 'Intro'}</div>
-                </div>
-                <span class="text-[10px] font-mono text-slate-400 whitespace-nowrap bg-slate-800 px-1.5 py-0.5 rounded">
-                  ${n.metadata.start_time}s
-                </span>
-              </div>
-            `).join('')}
-            ${phase.nodes.length > 8 ? `
-              <div class="text-center text-[10px] text-slate-400 pt-1">
-                + ${phase.nodes.length - 8} lecciones más (ver en Catálogo)
-              </div>
-            ` : ''}
+
+            <!-- Action Button: Open YouTube directly at exact timestamp -->
+            <div class="shrink-0 flex sm:flex-col items-center sm:items-end justify-between gap-2 border-t sm:border-t-0 border-slate-800/80 pt-3 sm:pt-0">
+              <a href="https://youtube.com/watch?v=${meta.video_id}&t=${startSec}s" target="_blank"
+                 class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                <span>Ver lección</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </a>
+              <button onclick="inspectInGraph('${node.id}')" class="text-[11px] text-slate-400 hover:text-indigo-400 font-medium transition">
+                Ver en mapa mental ↗
+              </button>
+            </div>
+
           </div>
         `;
-        container.appendChild(phaseEl);
+        container.appendChild(card);
       });
     }
 
-    function selectSegmentFromCatalog(segmentId) {
-      switchSidebarTab('path');
-      computeAndDisplayPath(segmentId);
+    function startFromBeginning() {
+      if (orderedCurriculum.length > 0) {
+        const first = orderedCurriculum[0];
+        const url = `https://youtube.com/watch?v=${first.metadata.video_id}&t=${first.metadata.start_time || 0}s`;
+        window.open(url, '_blank');
+      }
     }
 
-    function populateVideoFilter() {
-      const select = document.getElementById('video-select');
-      const videoMap = new Map();
-      graphData.nodes.forEach(n => {
-        const vidId = n.metadata.video_id;
-        const vidTitle = n.metadata.video_title || vidId;
-        if (!videoMap.has(vidId)) {
-          videoMap.set(vidId, vidTitle);
+    function handleSearch(term) {
+      renderTimelineRoadmap(term);
+    }
+
+    function switchMainView(view) {
+      currentMainView = view;
+      const btnRoadmap = document.getElementById('btn-view-roadmap');
+      const btnGraph = document.getElementById('btn-view-graph');
+      const containerRoadmap = document.getElementById('view-roadmap-container');
+      const containerGraph = document.getElementById('view-graph-container');
+
+      if (view === 'roadmap') {
+        btnRoadmap.className = "px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm transition flex items-center gap-1.5";
+        btnGraph.className = "px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 font-medium transition flex items-center gap-1.5";
+        containerRoadmap.classList.remove('hidden');
+        containerGraph.classList.add('hidden');
+      } else {
+        btnGraph.className = "px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm transition flex items-center gap-1.5";
+        btnRoadmap.className = "px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 font-medium transition flex items-center gap-1.5";
+        containerGraph.classList.remove('hidden');
+        containerRoadmap.classList.add('hidden');
+
+        // Lazy load vis-network on first switch
+        if (!network) {
+          buildVisNetwork();
+        } else {
+          setTimeout(() => network.fit(), 50);
         }
-      });
+      }
+    }
 
-      videoMap.forEach((title, id) => {
-        const opt = document.createElement('option');
-        opt.value = id;
-        opt.innerText = title;
-        select.appendChild(opt);
-      });
+    function inspectInGraph(nodeId) {
+      switchMainView('graph');
+      setTimeout(() => {
+        if (network) {
+          network.focus(nodeId, { scale: 1.2, animation: { duration: 600 } });
+          showGraphPathModal(nodeId);
+        }
+      }, 100);
     }
 
     function buildVisNetwork() {
@@ -414,24 +462,22 @@
       
       allNodesRaw = graphData.nodes.map(n => {
         const isFoundational = (n.metadata.concepts_required || []).length === 0;
-        const titleShort = (n.metadata.video_title || 'Video').substring(0, 32);
+        const titleShort = (n.metadata.video_title || 'Video').substring(0, 30);
         const startSec = n.metadata.start_time || 0;
-        const endSec = n.metadata.end_time || 0;
         
         return {
           id: n.id,
-          label: `${titleShort}\n[${startSec}s - ${endSec}s]`,
-          title: `<b>${n.metadata.video_title}</b><br>Segmento: ${startSec}s a ${endSec}s<br><br><b>Enseña:</b> ${(n.metadata.concepts_taught || []).join(', ') || 'Ninguno'}<br><b>Requiere:</b> ${(n.metadata.concepts_required || []).join(', ') || 'Ninguno (Fundacional)'}`,
+          label: `${titleShort}\n[${formatTime(startSec)}]`,
+          title: `<b>${n.metadata.video_title}</b><br>Segmento: ${startSec}s a ${n.metadata.end_time}s<br><br><b>Enseña:</b> ${(n.metadata.concepts_taught || []).join(', ') || 'General'}`,
           color: {
             background: isFoundational ? '#059669' : '#4338ca',
             border: isFoundational ? '#10b981' : '#6366f1',
             highlight: { background: '#9333ea', border: '#c084fc' }
           },
-          font: { color: '#ffffff', size: 13, face: 'Inter, system-ui, sans-serif', strokeWidth: 2, strokeColor: '#0f172a' },
+          font: { color: '#ffffff', size: 12, face: 'Plus Jakarta Sans, sans-serif' },
           shape: 'box',
-          margin: 12,
+          margin: 10,
           borderWidth: 2,
-          shadow: { enabled: true, color: 'rgba(0,0,0,0.5)', size: 8, x: 2, y: 3 },
           data: n.metadata
         };
       });
@@ -440,9 +486,9 @@
         id: `${e.source}->${e.target}`,
         from: e.source,
         to: e.target,
-        arrows: { to: { enabled: true, scaleFactor: 1.1 } },
+        arrows: { to: { enabled: true, scaleFactor: 1.0 } },
         color: { color: '#64748b', highlight: '#c084fc' },
-        width: 2,
+        width: 1.5,
         smooth: { type: 'cubicBezier', roundness: 0.3 }
       }));
 
@@ -452,270 +498,76 @@
       renderNetworkWithOptions();
     }
 
-    function getNetworkOptions(layoutMode) {
-      if (layoutMode === 'hierarchical') {
-        return {
-          layout: {
-            hierarchical: {
-              enabled: true,
-              direction: 'LR',
-              sortMethod: 'directed',
-              levelSeparation: 320,
-              nodeSpacing: 140,
-              treeSpacing: 160
-            }
-          },
-          physics: {
-            hierarchicalRepulsion: {
-              nodeDistance: 160
-            }
-          },
-          interaction: { hover: true, tooltipDelay: 100, zoomView: true, dragView: true }
-        };
-      }
-
-      // Organic Constellation Physics Mode (Default)
-      return {
-        layout: { hierarchical: { enabled: false } },
-        physics: {
-          enabled: true,
-          solver: 'forceAtlas2Based',
-          forceAtlas2Based: {
-            gravitationalConstant: -70,
-            centralGravity: 0.015,
-            springLength: 150,
-            springConstant: 0.08,
-            damping: 0.4,
-            avoidOverlap: 0.9
-          },
-          stabilization: {
-            iterations: 150,
-            updateInterval: 25
-          }
-        },
-        interaction: { hover: true, tooltipDelay: 100, zoomView: true, dragView: true }
-      };
-    }
-
     function renderNetworkWithOptions() {
       const container = document.getElementById('graph-container');
-      const options = getNetworkOptions(currentLayout);
+      const options = {
+        layout: { hierarchical: { enabled: currentLayout === 'hierarchical', direction: 'LR', nodeSpacing: 140 } },
+        physics: {
+          enabled: currentLayout === 'organic',
+          solver: 'forceAtlas2Based',
+          forceAtlas2Based: { gravitationalConstant: -60, springLength: 140, avoidOverlap: 0.8 }
+        },
+        interaction: { hover: true, tooltipDelay: 100 }
+      };
 
-      if (network) {
-        network.destroy();
-      }
-
+      if (network) network.destroy();
       network = new vis.Network(container, { nodes: nodesDataSet, edges: edgesDataSet }, options);
 
       network.on("click", function(params) {
         if (params.nodes.length > 0) {
           const selectedId = params.nodes[0];
-          switchSidebarTab('path');
-          computeAndDisplayPath(selectedId);
+          showGraphPathModal(selectedId);
         }
-      });
-
-      // Fit with comfortable zoom level after physics stabilization
-      network.once("stabilizationIterationsDone", function() {
-        network.fit({
-          animation: { duration: 800, easingFunction: 'easeInOutQuad' }
-        });
       });
     }
 
     function switchLayout(mode) {
-      if (currentLayout === mode) return;
       currentLayout = mode;
-
-      const btnOrganic = document.getElementById('btn-layout-organic');
-      const btnHierarchical = document.getElementById('btn-layout-hierarchical');
-
-      if (mode === 'organic') {
-        btnOrganic.className = "px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium shadow-sm transition";
-        btnHierarchical.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition";
-      } else {
-        btnHierarchical.className = "px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium shadow-sm transition";
-        btnOrganic.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition";
-      }
-
+      document.getElementById('btn-sub-organic').className = mode === 'organic' 
+        ? "flex-1 py-1 px-2 rounded-lg bg-indigo-600 text-white text-[11px] font-semibold"
+        : "flex-1 py-1 px-2 rounded-lg bg-slate-800 text-slate-400 text-[11px] font-medium";
+      document.getElementById('btn-sub-hierarchical').className = mode === 'hierarchical'
+        ? "flex-1 py-1 px-2 rounded-lg bg-indigo-600 text-white text-[11px] font-semibold"
+        : "flex-1 py-1 px-2 rounded-lg bg-slate-800 text-slate-400 text-[11px] font-medium";
       renderNetworkWithOptions();
     }
 
-    function filterByVideo(videoId) {
-      if (videoId === 'all') {
-        nodesDataSet.clear();
-        nodesDataSet.add(allNodesRaw);
-        edgesDataSet.clear();
-        edgesDataSet.add(allEdgesRaw);
-      } else {
-        const filteredNodes = allNodesRaw.filter(n => n.data.video_id === videoId);
-        const nodeIds = new Set(filteredNodes.map(n => n.id));
-        const filteredEdges = allEdgesRaw.filter(e => nodeIds.has(e.from) && nodeIds.has(e.to));
+    async function showGraphPathModal(targetId) {
+      const modal = document.getElementById('graph-selected-path-card');
+      const titleEl = document.getElementById('modal-path-title');
+      const stepsContainer = document.getElementById('modal-path-steps');
 
-        nodesDataSet.clear();
-        nodesDataSet.add(filteredNodes);
-        edgesDataSet.clear();
-        edgesDataSet.add(filteredEdges);
-      }
+      const targetNode = allNodesRaw.find(n => n.id === targetId);
+      titleEl.innerText = targetNode ? targetNode.data.video_title : targetId;
+      modal.classList.remove('hidden');
 
-      network.fit({ animation: { duration: 600 } });
-    }
-
-    async function computeAndDisplayPath(targetId) {
-      let serverOrderedIds = null;
-
-      // 1. First attempt: Ask the Go backend API for the topological path
+      // Fetch path from Go API or fallback
+      let steps = [];
       try {
-        const response = await fetch(`/api/path?target=${encodeURIComponent(targetId)}`);
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.steps && Array.isArray(data.steps)) {
-            serverOrderedIds = data.steps.map(s => s.segment_id);
-          }
+        const res = await fetch(`/api/path?target=${encodeURIComponent(targetId)}`);
+        if (res.ok) {
+          const data = await res.json();
+          steps = data.steps || [];
         }
       } catch (e) {
-        console.warn("Backend API not reachable, falling back to client-side solver:", e);
+        console.warn("API offline, showing direct target");
       }
 
-      // 2. Client-side fallback solver (BFS backward + Kahn/DFS)
-      if (!serverOrderedIds) {
-        const ancestors = new Set();
-        const queue = [targetId];
-
-        while (queue.length > 0) {
-          const current = queue.shift();
-          const incomingEdges = allEdgesRaw.filter(e => e.to === current);
-          for (let edge of incomingEdges) {
-            if (!ancestors.has(edge.from)) {
-              ancestors.add(edge.from);
-              queue.push(edge.from);
-            }
-          }
-        }
-
-        const pathNodeIds = Array.from(ancestors);
-        pathNodeIds.push(targetId);
-
-        const order = [];
-        const visited = new Set();
-        
-        function visit(nodeId) {
-          if (visited.has(nodeId)) return;
-          visited.add(nodeId);
-          const prereqs = allEdgesRaw.filter(e => e.to === nodeId && pathNodeIds.includes(e.from)).map(e => e.from);
-          for (let p of prereqs) visit(p);
-          order.push(nodeId);
-        }
-
-        for (let id of pathNodeIds) visit(id);
-        serverOrderedIds = order;
-      }
-
-      // Highlight nodes & edges on network
-      highlightPathOnNetwork(serverOrderedIds, targetId);
-
-      // Render cards in sidebar
-      renderPathUI(serverOrderedIds, targetId);
+      stepsContainer.innerHTML = steps.map((s, idx) => `
+        <div class="bg-slate-800/80 p-2 rounded-lg text-xs flex justify-between items-center">
+          <div>
+            <div class="font-bold text-slate-200">Paso ${idx + 1}</div>
+            <div class="text-[10px] text-slate-400">${s.segment_id}</div>
+          </div>
+          <a href="https://youtube.com/watch?v=${s.video_id}&t=${s.start_time}s" target="_blank" class="text-[10px] text-indigo-400 hover:underline">
+            Ver ↗
+          </a>
+        </div>
+      `).join('');
     }
 
-    function highlightPathOnNetwork(pathIds, targetId) {
-      const pathSet = new Set(pathIds);
-
-      // Focus camera on target
-      network.focus(targetId, {
-        scale: 1.1,
-        animation: { duration: 600, easingFunction: 'easeInOutQuad' }
-      });
-
-      // Update node styles dynamically
-      const nodeUpdates = allNodesRaw.map(n => {
-        const inPath = pathSet.has(n.id);
-        const isTarget = (n.id === targetId);
-
-        if (isTarget) {
-          return { id: n.id, color: { background: '#9333ea', border: '#d8b4fe' }, borderWidth: 3 };
-        } else if (inPath) {
-          return { id: n.id, color: { background: '#6366f1', border: '#a5b4fc' }, borderWidth: 2 };
-        } else {
-          return { id: n.id, color: { background: '#1e293b', border: '#334155' }, borderWidth: 1 };
-        }
-      });
-      nodesDataSet.update(nodeUpdates);
-
-      // Update edge styles
-      const edgeUpdates = allEdgesRaw.map(e => {
-        const inPath = pathSet.has(e.from) && pathSet.has(e.to);
-        return {
-          id: e.id,
-          color: { color: inPath ? '#c084fc' : '#334155' },
-          width: inPath ? 3 : 1
-        };
-      });
-      edgesDataSet.update(edgeUpdates);
-    }
-
-    function renderPathUI(orderedIds, targetId) {
-      const container = document.getElementById('path-list');
-      const stepCount = document.getElementById('path-step-count');
-      const badgeSteps = document.getElementById('badge-path-steps');
-      container.innerHTML = '';
-      stepCount.innerText = `${orderedIds.length} pasos`;
-      badgeSteps.innerText = orderedIds.length;
-
-      orderedIds.forEach((id, index) => {
-        const node = allNodesRaw.find(n => n.id === id);
-        if (!node) return;
-        const meta = node.data;
-        const isTarget = (id === targetId);
-
-        const card = document.createElement('div');
-        card.className = `p-3.5 rounded-xl border transition cursor-pointer ${
-          isTarget 
-            ? 'bg-purple-950/40 border-purple-500/60 shadow-lg shadow-purple-500/10' 
-            : 'bg-slate-800/60 border-slate-700/60 hover:border-slate-500'
-        }`;
-
-        card.onclick = () => {
-          network.focus(id, { scale: 1.2, animation: { duration: 500 } });
-        };
-
-        card.innerHTML = `
-          <div class="flex items-start justify-between gap-2 mb-2">
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-md font-bold ${
-              isTarget ? 'bg-purple-600 text-white shadow-sm' : 'bg-slate-700 text-slate-200'
-            }">Paso ${index + 1}${isTarget ? ' (Objetivo)' : ''}</span>
-            <span class="text-[11px] font-mono text-slate-400 font-medium">${meta.start_time}s - ${meta.end_time}s</span>
-          </div>
-          <h4 class="text-xs font-semibold text-slate-100 line-clamp-1 mb-1.5">${meta.video_title}</h4>
-          <div class="space-y-1 text-[11px]">
-            <div class="text-emerald-400 font-mono text-[10px] bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
-              <span class="font-bold">+ Enseña:</span> ${(meta.concepts_taught || []).join(', ') || 'General'}
-            </div>
-            ${(meta.concepts_required || []).length > 0 ? `
-              <div class="text-slate-300 font-mono text-[10px] bg-slate-900/60 px-2 py-1 rounded border border-slate-700/40">
-                <span class="font-bold text-slate-400">- Requiere:</span> ${meta.concepts_required.join(', ')}
-              </div>
-            ` : ''}
-          </div>
-          <div class="mt-2.5 pt-2 border-t border-slate-700/40 flex justify-between items-center">
-            <span class="text-[10px] text-slate-400 font-mono">${meta.video_id}</span>
-            <a href="https://youtube.com/watch?v=${meta.video_id}&t=${meta.start_time}s" target="_blank" onclick="event.stopPropagation()"
-               class="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-semibold">
-              Ver en YouTube ↗
-            </a>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function resetView() {
-      if (network) {
-        // Reset node styles to original
-        nodesDataSet.update(allNodesRaw);
-        edgesDataSet.update(allEdgesRaw);
-        network.fit({ animation: { duration: 600 } });
-      }
+    function closeGraphModal() {
+      document.getElementById('graph-selected-path-card').classList.add('hidden');
     }
 
     window.addEventListener('DOMContentLoaded', init);
