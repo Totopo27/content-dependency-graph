@@ -112,8 +112,12 @@ class YouTubeTranscriptWorker:
         channel_id: str = "custom_channel",
         channel_title: str = "Curated Channel",
         chunk_duration_sec: int = 300,
+        ollama_client: Optional[Any] = None,
     ) -> Dict[str, Any]:
-        """Ingests multiple videos, fetches transcripts, segments them, and formats for the Go Core."""
+        """Ingests multiple videos, fetches transcripts, segments them, and formats for the Go Core.
+
+        If ollama_client is provided, runs automated concept extraction on each segment.
+        """
         catalog_videos: List[Dict[str, Any]] = []
 
         for idx, v_info in enumerate(videos_input, start=1):
@@ -128,14 +132,32 @@ class YouTubeTranscriptWorker:
 
             segments: List[Dict[str, Any]] = []
             for seg_idx, chunk in enumerate(chunks, start=1):
+                seg_id = f"seg_{video_id}_{seg_idx:02d}"
+                taught: List[str] = []
+                required: List[str] = []
+
+                if ollama_client is not None and chunk["transcript_text"].strip():
+                    print(f"   -> Extracting concepts with Ollama for {seg_id}...")
+                    try:
+                        extracted_seg = ollama_client.extract_from_transcript(
+                            segment_id=seg_id,
+                            transcript_text=chunk["transcript_text"],
+                            start_time=chunk["start_time"],
+                            end_time=chunk["end_time"],
+                        )
+                        taught = extracted_seg.concepts_taught
+                        required = extracted_seg.concepts_required
+                    except Exception as e:
+                        print(f"   [!] Ollama extraction error for {seg_id}: {e}", file=sys.stderr)
+
                 segments.append({
-                    "segment_id": f"seg_{video_id}_{seg_idx:02d}",
+                    "segment_id": seg_id,
                     "video_id": video_id,
                     "start_time": chunk["start_time"],
                     "end_time": chunk["end_time"],
                     "transcript_text": chunk["transcript_text"],
-                    "concepts_taught": [],
-                    "concepts_required": [],
+                    "concepts_taught": taught,
+                    "concepts_required": required,
                 })
 
             duration = chunks[-1]["end_time"] if chunks else 0
@@ -162,15 +184,31 @@ def main():
     parser.add_argument("--channel-title", default="YouTube Curated Channel", help="Title of the channel/course")
     parser.add_argument("--output", default="tests/fixtures/live_channel_catalog.json", help="Path to output JSON")
     parser.add_argument("--chunk-size", type=int, default=300, help="Chunk length in seconds (default: 300s / 5 min)")
+    parser.add_argument("--extract-ollama", action="store_true", help="Extract concepts automatically using local Ollama LLM")
+    parser.add_argument("--ollama-model", default="richardyoung/qwen2.5-coder-14b-instruct-abliterated:latest", help="Ollama model to use")
     args = parser.parse_args()
 
     worker = YouTubeTranscriptWorker()
     video_inputs = [{"url": u} for u in args.urls]
 
+    ollama_client = None
+    if args.extract_ollama:
+        try:
+            from src.services.ollama_client import OllamaExtractionClient
+            ollama_client = OllamaExtractionClient(model=args.ollama_model)
+            if not ollama_client.is_available():
+                print("[!] Warning: Ollama daemon is not responding at localhost:11434. Running without LLM extraction.", file=sys.stderr)
+                ollama_client = None
+            else:
+                print(f"[*] Ollama connected. Using model: {args.ollama_model}")
+        except Exception as e:
+            print(f"[!] Could not initialize Ollama client: {e}", file=sys.stderr)
+
     catalog = worker.process_video_list(
         video_inputs,
         channel_title=args.channel_title,
         chunk_duration_sec=args.chunk_size,
+        ollama_client=ollama_client,
     )
 
     output_path = Path(args.output)
