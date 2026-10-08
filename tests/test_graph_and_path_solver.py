@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import pytest
-from src.domain.models import ChannelCatalog
+from src.domain.models import ChannelCatalog, VideoSegment
 from src.services.graph_builder import GraphBuilder
 from src.services.path_solver import PedagogicalPathSolver
 
@@ -19,10 +19,11 @@ def test_graph_builder_dag_properties(sample_catalog):
     builder = GraphBuilder()
     curriculum = builder.build_from_catalog(sample_catalog)
 
-    # 1. Must produce valid CurriculumGraph
+    # 1. Must produce valid CurriculumGraph with generated_at
     assert curriculum.channel_id == "UC_test_backend_channel"
     assert len(curriculum.nodes) == 7  # 7 total segments across 5 videos
     assert len(curriculum.edges) > 0
+    assert curriculum.generated_at is not None
 
     # 2. Must detect external prerequisite orphan
     assert "cryptographic-hashing" in curriculum.external_prerequisites
@@ -36,7 +37,8 @@ def test_graph_builder_dag_properties(sample_catalog):
 def test_path_solver_prerequisite_sequence(sample_catalog):
     builder = GraphBuilder()
     builder.build_from_catalog(sample_catalog)
-    solver = PedagogicalPathSolver(builder)
+    # Test Inversion of Control: pass nx_graph directly
+    solver = PedagogicalPathSolver(builder.nx_graph)
 
     # Target: seg_05_01 (JWT Authentication, which depends on api-database-integration)
     path = solver.get_prerequisite_path("seg_05_01")
@@ -52,7 +54,18 @@ def test_path_solver_prerequisite_sequence(sample_catalog):
     assert "seg_04_01" in step_segment_ids  # API DB integration
     assert step_segment_ids[-1] == "seg_05_01"  # Target must be last step
 
-    # Verify ordering consistency: seg_01_01 must be before seg_02_01
+    # Verify ordering consistency
     assert step_segment_ids.index("seg_01_01") < step_segment_ids.index("seg_02_01")
-    # seg_03_01 (SQL) must be before seg_04_01 (API + DB)
     assert step_segment_ids.index("seg_03_01") < step_segment_ids.index("seg_04_01")
+
+
+def test_path_solver_get_learning_path_domain_objects(sample_catalog):
+    builder = GraphBuilder()
+    builder.build_from_catalog(sample_catalog)
+    solver = PedagogicalPathSolver(builder.nx_graph)
+
+    # Test strict spec helper get_learning_path returning VideoSegment instances
+    segments = solver.get_learning_path("vid_04")
+    assert len(segments) > 0
+    assert all(isinstance(s, VideoSegment) for s in segments)
+    assert segments[-1].video_id == "vid_04"

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from enum import Enum
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
@@ -63,6 +64,7 @@ class GraphEdge(BaseModel):
 class CurriculumGraph(BaseModel):
     channel_id: str
     channel_title: str
+    generated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     nodes: List[GraphNode] = Field(default_factory=list)
     edges: List[GraphEdge] = Field(default_factory=list)
     external_prerequisites: List[str] = Field(default_factory=list)

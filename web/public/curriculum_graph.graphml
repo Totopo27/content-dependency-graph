@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d10" for="edge" attr.name="target_date" attr.type="string"/>
+<key id="d9" for="edge" attr.name="source_date" attr.type="string"/>
+<key id="d8" for="edge" attr.name="concept" attr.type="string"/>
+<key id="d7" for="edge" attr.name="relation" attr.type="string"/>
+<key id="d6" for="node" attr.name="concepts_required" attr.type="string"/>
+<key id="d5" for="node" attr.name="concepts_taught" attr.type="string"/>
+<key id="d4" for="node" attr.name="published_at" attr.type="string"/>
+<key id="d3" for="node" attr.name="end_time" attr.type="long"/>
+<key id="d2" for="node" attr.name="start_time" attr.type="long"/>
+<key id="d1" for="node" attr.name="video_title" attr.type="string"/>
+<key id="d0" for="node" attr.name="video_id" attr.type="string"/>
+<graph edgedefault="directed"><node id="seg_01_01">
+  <data key="d0">vid_01</data>
+  <data key="d1">Introducción a Protocolos de Red y HTTP</data>
+  <data key="d2">0</data>
+  <data key="d3">300</data>
+  <data key="d4">2023-01-10T10:00:00Z</data>
+  <data key="d5">http-basics,client-server-model</data>
+  <data key="d6"></data>
+</node>
+<node id="seg_01_02">
+  <data key="d0">vid_01</data>
+  <data key="d1">Introducción a Protocolos de Red y HTTP</data>
+  <data key="d2">301</data>
+  <data key="d3">600</data>
+  <data key="d4">2023-01-10T10:00:00Z</data>
+  <data key="d5">http-methods</data>
+  <data key="d6">http-basics</data>
+</node>
+<node id="seg_02_01">
+  <data key="d0">vid_02</data>
+  <data key="d1">Construyendo tu Primera API REST</data>
+  <data key="d2">0</data>
+  <data key="d3">450</data>
+  <data key="d4">2023-02-15T10:00:00Z</data>
+  <data key="d5">rest-api-design</data>
+  <data key="d6">http-methods,client-server-model</data>
+</node>
+<node id="seg_02_02">
+  <data key="d0">vid_02</data>
+  <data key="d1">Construyendo tu Primera API REST</data>
+  <data key="d2">451</data>
+  <data key="d3">900</data>
+  <data key="d4">2023-02-15T10:00:00Z</data>
+  <data key="d5">json-api-endpoints</data>
+  <data key="d6">rest-api-design</data>
+</node>
+<node id="seg_03_01">
+  <data key="d0">vid_03</data>
+  <data key="d1">Bases de Datos Relacionales y SQL</data>
+  <data key="d2">0</data>
+  <data key="d3">600</data>
+  <data key="d4">2023-03-01T10:00:00Z</data>
+  <data key="d5">relational-databases,sql-basics</data>
+  <data key="d6"></data>
+</node>
+<node id="seg_04_01">
+  <data key="d0">vid_04</data>
+  <data key="d1">Persistencia de Datos en APIs con PostgreSQL</data>
+  <data key="d2">0</data>
+  <data key="d3">750</data>
+  <data key="d4">2023-04-10T10:00:00Z</data>
+  <data key="d5">api-database-integration</data>
+  <data key="d6">json-api-endpoints,sql-basics</data>
+</node>
+<node id="seg_05_01">
+  <data key="d0">vid_05</data>
+  <data key="d1">Autenticación Segura con JWT y Criptografía Asimétrica</data>
+  <data key="d2">0</data>
+  <data key="d3">900</data>
+  <data key="d4">2023-05-20T10:00:00Z</data>
+  <data key="d5">jwt-authentication</data>
+  <data key="d6">api-database-integration,cryptographic-hashing</data>
+</node>
+<edge source="seg_01_01" target="seg_01_02">
+  <data key="d7">PREREQUISITE_OF</data>
+  <data key="d8">http-basics</data>
+  <data key="d9">2023-01-10T10:00:00Z</data>
+  <data key="d10">2023-01-10T10:00:00Z</data>
+</edge>
+<edge source="seg_01_01" target="seg_02_01">
+  <data key="d7">PREREQUISITE_OF</data>
+  <data key="d8">client-server-model</data>
+  <data key="d9">2023-01-10T10:00:00Z</data>
+  <data key="d10">2023-02-15T10:00:00Z</data>
+</edge>
+<edge source="seg_01_02" target="seg_02_01">
+  <data key="d7">PREREQUISITE_OF</data>
+  <data key="d8">http-methods</data>
+  <data key="d9">2023-01-10T10:00:00Z</data>
+  <data key="d10">2023-02-15T10:00:00Z</data>
+</edge>
+<edge source="seg_02_01" target="seg_02_02">
+  <data key="d7">PREREQUISITE_OF</data>
+  <data key="d8">rest-api-design</data>
+  <data key="d9">2023-02-15T10:00:00Z</data>
+  <data key="d10">2023-02-15T10:00:00Z</data>
+</edge>
+<edge source="seg_02_02" target="seg_04_01">
+  <data key="d7">PREREQUISITE_OF</data>
+  <data key="d8">json-api-endpoints</data>
+  <data key="d9">2023-02-15T10:00:00Z</data>
+  <data key="d10">2023-04-10T10:00:00Z</data>
+</edge>
+<edge source="seg_03_01" target="seg_04_01">
+  <data key="d7">PREREQUISITE_OF</data>
+  <data key="d8">sql-basics</data>
+  <data key="d9">2023-03-01T10:00:00Z</data>
+  <data key="d10">2023-04-10T10:00:00Z</data>
+</edge>
+<edge source="seg_04_01" target="seg_05_01">
+  <data key="d7">PREREQUISITE_OF</data>
+  <data key="d8">api-database-integration</data>
+  <data key="d9">2023-04-10T10:00:00Z</data>
+  <data key="d10">2023-05-20T10:00:00Z</data>
+</edge>
+</graph></graphml>
