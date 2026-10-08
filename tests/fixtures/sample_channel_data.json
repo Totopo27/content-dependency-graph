@@ -1,0 +1,102 @@
+{
+  "channel_id": "UC_test_backend_channel",
+  "channel_title": "Backend Engineering Academy",
+  "videos": [
+    {
+      "id": "vid_01",
+      "title": "Introducción a Protocolos de Red y HTTP",
+      "published_at": "2023-01-10T10:00:00Z",
+      "duration": 600,
+      "segments": [
+        {
+          "segment_id": "seg_01_01",
+          "start_time": 0,
+          "end_time": 300,
+          "transcript_text": "En este video vamos a explicar desde cero el modelo cliente servidor y qué es el protocolo HTTP.",
+          "concepts_taught": ["http-basics", "client-server-model"],
+          "concepts_required": []
+        },
+        {
+          "segment_id": "seg_01_02",
+          "start_time": 301,
+          "end_time": 600,
+          "transcript_text": "Ahora vemos los métodos GET y POST dentro de las peticiones HTTP.",
+          "concepts_taught": ["http-methods"],
+          "concepts_required": ["http-basics"]
+        }
+      ]
+    },
+    {
+      "id": "vid_02",
+      "title": "Construyendo tu Primera API REST",
+      "published_at": "2023-02-15T10:00:00Z",
+      "duration": 900,
+      "segments": [
+        {
+          "segment_id": "seg_02_01",
+          "start_time": 0,
+          "end_time": 450,
+          "transcript_text": "Para construir una API REST necesitamos entender recursos y verbos HTTP que ya aprendimos antes.",
+          "concepts_taught": ["rest-api-design"],
+          "concepts_required": ["http-methods", "client-server-model"]
+        },
+        {
+          "segment_id": "seg_02_02",
+          "start_time": 451,
+          "end_time": 900,
+          "transcript_text": "Implementamos los endpoints con formato JSON y códigos de estado HTTP.",
+          "concepts_taught": ["json-api-endpoints"],
+          "concepts_required": ["rest-api-design"]
+        }
+      ]
+    },
+    {
+      "id": "vid_03",
+      "title": "Bases de Datos Relacionales y SQL",
+      "published_at": "2023-03-01T10:00:00Z",
+      "duration": 1200,
+      "segments": [
+        {
+          "segment_id": "seg_03_01",
+          "start_time": 0,
+          "end_time": 600,
+          "transcript_text": "Explicamos el modelo relacional, tablas, columnas y claves primarias desde cero.",
+          "concepts_taught": ["relational-databases", "sql-basics"],
+          "concepts_required": []
+        }
+      ]
+    },
+    {
+      "id": "vid_04",
+      "title": "Persistencia de Datos en APIs con PostgreSQL",
+      "published_at": "2023-04-10T10:00:00Z",
+      "duration": 1500,
+      "segments": [
+        {
+          "segment_id": "seg_04_01",
+          "start_time": 0,
+          "end_time": 750,
+          "transcript_text": "Conectamos nuestra API REST con una base de datos PostgreSQL usando SQL.",
+          "concepts_taught": ["api-database-integration"],
+          "concepts_required": ["json-api-endpoints", "sql-basics"]
+        }
+      ]
+    },
+    {
+      "id": "vid_05",
+      "title": "Autenticación Segura con JWT y Criptografía Asimétrica",
+      "published_at": "2023-05-20T10:00:00Z",
+      "duration": 1800,
+      "segments": [
+        {
+          "segment_id": "seg_05_01",
+          "start_time": 0,
+          "end_time": 900,
+          "transcript_text": "En este video protegemos nuestra API con JSON Web Tokens. Asumimos que ya dominan criptografía básica y hashing.",
+          "concepts_taught": ["jwt-authentication"],
+          "concepts_required": ["api-database-integration", "cryptographic-hashing"]
+        }
+      ]
+    }
+  ]
+}
