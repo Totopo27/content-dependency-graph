@@ -252,7 +252,12 @@
         });
       }
 
-      orderedCurriculum = sorted;
+      // Filter out empty noise segments that neither teach nor require concepts
+      orderedCurriculum = sorted.filter(n => {
+        const taught = n.metadata.concepts_taught || [];
+        const req = n.metadata.concepts_required || [];
+        return taught.length > 0 || req.length > 0;
+      });
     }
 
     function renderHeaderStats() {

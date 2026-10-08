@@ -1,7 +1,7 @@
 {
   "channel_id": "UC_mattpocockuk_ai",
   "channel_title": "Matt Pocock: AI Coding & Agent Skills (with v1.3)",
-  "generated_at": "2026-10-08T21:50:07.186838+00:00",
+  "generated_at": "2026-10-08T22:27:09.959131+00:00",
   "nodes": [
     {
       "id": "seg_M6mYodf0dJM_01",
@@ -167,10 +167,10 @@
     {
       "id": "seg_-QFHIoCo-Ko_01",
       "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [7-307s]",
+      "label": "Full Walkthrough: Workflow for AI Coding â€” Matt Pocock [7-307s]",
       "metadata": {
         "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
+        "video_title": "Full Walkthrough: Workflow for AI Coding â€” Matt Pocock",
         "start_time": 7,
         "end_time": 307,
         "published_at": "2026-10-08T18:34:51.092996+00:00",
@@ -187,10 +187,10 @@
     {
       "id": "seg_-QFHIoCo-Ko_02",
       "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [307-608s]",
+      "label": "Full Walkthrough: Workflow for AI Coding â€” Matt Pocock [307-608s]",
       "metadata": {
         "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
+        "video_title": "Full Walkthrough: Workflow for AI Coding â€” Matt Pocock",
         "start_time": 307,
         "end_time": 608,
         "published_at": "2026-10-08T18:34:51.092996+00:00",
@@ -207,10 +207,10 @@
     {
       "id": "seg_-QFHIoCo-Ko_03",
       "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [608-910s]",
+      "label": "Full Walkthrough: Workflow for AI Coding â€” Matt Pocock [608-910s]",
       "metadata": {
         "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
+        "video_title": "Full Walkthrough: Workflow for AI Coding â€” Matt Pocock",
         "start_time": 608,
         "end_time": 910,
         "published_at": "2026-10-08T18:34:51.092996+00:00",
@@ -226,10 +226,10 @@
     {
       "id": "seg_-QFHIoCo-Ko_04",
       "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [910-1213s]",
+      "label": "Full Walkthrough: Workflow for AI Coding â€” Matt Pocock [910-1213s]",
       "metadata": {
         "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
+        "video_title": "Full Walkthrough: Workflow for AI Coding â€” Matt Pocock",
         "start_time": 910,
         "end_time": 1213,
         "published_at": "2026-10-08T18:34:51.092996+00:00",
@@ -240,230 +240,6 @@
           "multiphase-loops",
           "session-phases-system-explore-impl-test"
         ]
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_05",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [1213-1513s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 1213,
-        "end_time": 1513,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_06",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [1513-1816s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 1513,
-        "end_time": 1816,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_07",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [1816-2119s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 1816,
-        "end_time": 2119,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_08",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [2119-2419s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 2119,
-        "end_time": 2419,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_09",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [2419-2720s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 2419,
-        "end_time": 2720,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_10",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [2720-3021s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 2720,
-        "end_time": 3021,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_11",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [3021-3322s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 3021,
-        "end_time": 3322,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_12",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [3322-3625s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 3322,
-        "end_time": 3625,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_13",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [3625-3925s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 3625,
-        "end_time": 3925,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_14",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [3925-4226s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 3925,
-        "end_time": 4226,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_15",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [4226-4528s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 4226,
-        "end_time": 4528,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_16",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [4528-4828s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 4528,
-        "end_time": 4828,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_17",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [4828-5129s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 4828,
-        "end_time": 5129,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_18",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [5129-5429s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 5129,
-        "end_time": 5429,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_19",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [5429-5731s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 5429,
-        "end_time": 5731,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
-      }
-    },
-    {
-      "id": "seg_-QFHIoCo-Ko_20",
-      "type": "video_segment",
-      "label": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock [5731-5785s]",
-      "metadata": {
-        "video_id": "-QFHIoCo-Ko",
-        "video_title": "Full Walkthrough: Workflow for AI Coding \u00e2\u20ac\u201d Matt Pocock",
-        "start_time": 5731,
-        "end_time": 5785,
-        "published_at": "2026-10-08T18:34:51.092996+00:00",
-        "concepts_taught": [],
-        "concepts_required": []
       }
     },
     {
